@@ -32,18 +32,24 @@ const TypingTest = () => {
 	};
 
 	useEffect(() => {
-		const handleKeyPress = () => {
+		const handleKeyDown = (e) => {
 			if (!isTyping) {
 				startTest();
 				setTimeLeft(15);
 				setIsTyping(true);
 			}
+
+			if (e.code === "Tab") {
+				e.preventDefault(); // Отменить стандартное действие (если нужно)
+				window.location.reload();
+				// startTest()
+			}
 		};
 
-		window.addEventListener("keypress", handleKeyPress);
+		window.addEventListener("keydown", handleKeyDown);
 
 		return () => {
-			window.removeEventListener("keypress", handleKeyPress);
+			window.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [isTyping]);
 
@@ -80,7 +86,7 @@ const TypingTest = () => {
 			setEndTime(Date.now());
 			setIsTestComplete(true);
 		} else {
-			setEndTime(0);
+			// setEndTime(0);
 			setIsTestComplete(false);
 		}
 	};
@@ -152,6 +158,7 @@ const TypingTest = () => {
 				<div className={classes.TestWords}>
 					<p>{timeLeft} </p>
 					{renderWords()}
+					<p>Words per Minute (WPM): {formattedWpm}</p>
 				</div>
 				<input
 					type="text"
@@ -174,7 +181,7 @@ const TypingTest = () => {
 					// <Timer  />
 				)} */}
 
-				<p>Words per Minute (WPM): {formattedWpm}</p>
+				
 			</div>
 		</>
 	);
