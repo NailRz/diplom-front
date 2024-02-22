@@ -24,7 +24,7 @@ const TestPage = () => {
 
   return (
     <div className="TestPage">
-      <h1>{name}</h1>
+      {/* <h1>{name}</h1> */}
       <TypingTest />
     </div>
   );

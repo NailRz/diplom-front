@@ -35,14 +35,13 @@ const TypingTest = () => {
 		const handleKeyDown = (e) => {
 			if (!isTyping) {
 				startTest();
-				setTimeLeft(15);
+				setTimeLeft(5);
 				setIsTyping(true);
 			}
 
 			if (e.code === "Tab") {
-				e.preventDefault(); // Отменить стандартное действие (если нужно)
+				e.preventDefault();
 				window.location.reload();
-				// startTest()
 			}
 		};
 
@@ -52,11 +51,6 @@ const TypingTest = () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [isTyping]);
-
-	// const handleTimeUp = () => {
-	// 	setEndTime(Date.now());
-	// 	setIsTestComplete(true);
-	// };
 
 	useEffect(() => {
 		let timer;
@@ -102,20 +96,16 @@ const TypingTest = () => {
 				<div
 					key={wordIndex}
 					className={classes.Word}
-					// style={{
-					// 	// background: "gray",
-					// 	display: "inline-block",
-					// 	marginInline: "3px",
-					// }}
+					style={{ position: "relative" }}
 				>
 					{wordLetters.map((letter, letterIndex) => {
 						let inputLetter = enteredWord[letterIndex];
 
-						let letterColor = "white";
+						let letterColor = "lightGray";
 
 						if (inputLetter !== undefined) {
 							if (inputLetter === letter) {
-								letterColor = "green";
+								letterColor = "white";
 							} else {
 								letterColor = "red";
 							}
@@ -126,7 +116,6 @@ const TypingTest = () => {
 								key={letterIndex}
 								style={{
 									color: letterColor,
-									// cursor: "text",
 								}}
 							>
 								{letter}
@@ -145,6 +134,18 @@ const TypingTest = () => {
 							{enteredWord.slice(word.length)}
 						</span>
 					)}
+					{wordIndex === inputArray.length - 1 && (
+						<span
+							className={classes.Caret}
+							style={{
+								position: "absolute",
+								left: enteredWord.length * 13.5 + "px", // Позиция каретки
+								height: "100%",
+								width: "2px",
+								// backgroundColor: 'black',
+							}}
+						/>
+					)}
 				</div>
 			);
 		});
@@ -153,6 +154,7 @@ const TypingTest = () => {
 	return (
 		<>
 			<div
+				className={classes.TestWordsWrapper}
 				style={{ fontFamily: "Arial", fontSize: "18px", lineHeight: "24px" }}
 			>
 				<div className={classes.TestWords}>
@@ -180,8 +182,6 @@ const TypingTest = () => {
 				{/* {isTestStarted && !isTestComplete && (
 					// <Timer  />
 				)} */}
-
-				
 			</div>
 		</>
 	);
