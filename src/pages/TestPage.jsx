@@ -5,15 +5,22 @@ import Service from "../API/Service";
 import { useFetching } from "../components/hooks/useFetching";
 
 const TestPage = () => {  
-  const [name, setName] = useState(null)
+  const [wordsArr, setWordsArr] = useState(null)
 
   const [fetchPosts, isPostsLoading, postError] = useFetching(
 		async () => {
 			const response = await Service.getAll();
-      console.log(response.data)
-      const arr = response.data
+      console.log(response.data)  
 
-      setName(arr.map(item => item.email))
+      const arr = []
+      for (let i = 0; i < response.data.length; i++) {
+        arr.push(response.data[i].words);
+      }
+      console.log(arr)
+
+    
+
+      setWordsArr(arr)
 		}
 	);
   
@@ -24,8 +31,8 @@ const TestPage = () => {
 
   return (
     <div className="TestPage">
-      {/* <h1>{name}</h1> */}
-      <TypingTest />
+      <h1 style={{position:"absolute"}}>{name}</h1>
+      <TypingTest wordsProp={wordsArr}/>
     </div>
   );
 };

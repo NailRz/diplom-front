@@ -1,13 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import data from "../../data/words.json";
 import { WpmCalculator } from "../../services/Wpm.js";
 import useWpmCalculator from "../hooks/useWpm.jsx";
 import Timer from "../Timer.jsx";
 import classes from "./TypingTest.module.css";
 
-const TypingTest = () => {
+const TypingTest = ({ wordsProp }) => {
 	const [inputText, setInputText] = useState("");
 	const [words, setWords] = useState([]);
+	// setWords(wordsProp)
 	const inputRef = useRef(null);
 	const [startTime, setStartTime] = useState(0);
 	const [endTime, setEndTime] = useState(0);
@@ -18,10 +19,25 @@ const TypingTest = () => {
 	const [isTyping, setIsTyping] = useState(false);
 	const wpm = useWpmCalculator(startTime, endTime, inputText, words);
 
+	// const flatWordsArr = wordsProp ? wordsProp.flatMap(word => word.split(', ')) : [];
+	// const flatWordsArr = wordsProp.flatMap(word => word.split(', '));
+	// console.log(flatWordsArr)
+
+	// const flatWordsArr = wordsProp.reduce((acc, word) => {
+	// 	const words = word.split(', ');
+	// 	return [...acc, ...words];
+	//   }, []);
+
+	//   console.log(flatWordsArr)
+	const flatWordsArr = useMemo(() => {
+		return wordsProp ? wordsProp.flatMap((word) => word.split(", ")) : [];
+	}, [wordsProp]);
+
 	useEffect(() => {
-		const shuffledWords = data.words.sort(() => Math.random() - 0.5);
-		setWords(shuffledWords);
-	}, []);
+		if (flatWordsArr.length > 2) {
+			setWords(flatWordsArr.sort(() => Math.random() - 0.5));
+		}
+	}, [flatWordsArr]);
 
 	const startTest = () => {
 		if (inputText.length === 0 && !isTestComplete) {
@@ -101,7 +117,7 @@ const TypingTest = () => {
 					{wordLetters.map((letter, letterIndex) => {
 						let inputLetter = enteredWord[letterIndex];
 
-						let letterColor = "lightGray";
+						let letterColor = "#596172";
 
 						if (inputLetter !== undefined) {
 							if (inputLetter === letter) {
@@ -136,10 +152,10 @@ const TypingTest = () => {
 					)}
 					{wordIndex === inputArray.length - 1 && (
 						<span
-							className={classes.Caret}
+							className={isTestStarted ? classes.CaretS : classes.Caret}
 							style={{
 								position: "absolute",
-								left: enteredWord.length * 13.5 + "px", // Позиция каретки
+								left: enteredWord.length * 13.5 + "px", 
 								height: "100%",
 								width: "2px",
 								// backgroundColor: 'black',
