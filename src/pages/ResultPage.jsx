@@ -1,10 +1,10 @@
 import React from 'react';
 
-const ResultPage = (wpm, time,) => {
+const ResultPage = () => {
     return (
         <div>
             <h1>Your results: </h1>
-            <h2> Words per Minute: {wpm}</h2>
+            <h2> Words per Minute: </h2>
         </div>
     );
 };

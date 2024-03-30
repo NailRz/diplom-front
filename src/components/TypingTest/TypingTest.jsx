@@ -155,7 +155,7 @@ const TypingTest = ({ wordsProp }) => {
 							className={isTestStarted ? classes.CaretS : classes.Caret}
 							style={{
 								position: "absolute",
-								left: enteredWord.length * 13.5 + "px", 
+								left: enteredWord.length * 13.75 + "px", 
 								height: "100%",
 								width: "2px",
 								// backgroundColor: 'black',
@@ -178,6 +178,7 @@ const TypingTest = ({ wordsProp }) => {
 					{renderWords()}
 					<p>Words per Minute (WPM): {formattedWpm}</p>
 				</div>
+				<div style={{textAlign:'center', bottom: "80px", position: 'absolute'}}>Press Tab to restart test. </div>
 				<input
 					type="text"
 					ref={inputRef}
