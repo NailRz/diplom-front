@@ -1,12 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import data from "../../data/words.json";
-import { WpmCalculator } from "../../services/Wpm.js";
 import useWpmCalculator from "../hooks/useWpm.jsx";
-import Timer from "../Timer.jsx";
 import classes from "./TypingTest.module.css";
 import { useNavigate } from "react-router-dom";
 import ResultPage from "../../pages/testPage/ResultPage.jsx";
-
 
 const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const [inputText, setInputText] = useState("");
@@ -22,7 +18,7 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const [timeLeft, setTimeLeft] = useState(5);
 	const [isTyping, setIsTyping] = useState(false);
 	const wpm = useWpmCalculator(startTime, endTime, inputText, words);
-	
+
 	const navigate = useNavigate();
 
 	// const flatWordsArr = wordsProp ? wordsProp.flatMap(word => word.split(', ')) : [];
@@ -59,11 +55,11 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 				startTest();
 				// setTimeLeft(5);
 				setIsTyping(true);
-				console.log('handleKeyDown')
+				console.log("handleKeyDown");
 			}
 
 			if (e.code === "Tab") {
-				setIsTestComplete(false)
+				setIsTestComplete(false);
 				e.preventDefault();
 				window.location.reload();
 			}
@@ -78,21 +74,21 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	useEffect(() => {
 		let timer;
-		console.log(timeLeft, isTestComplete, isTestStarted)
-		
+		console.log(timeLeft, isTestComplete, isTestStarted);
+
 		if (timeLeft > 0 && !isTestComplete && isTestStarted) {
-			console.log('da')
+			console.log("da");
 			timer = setTimeout(() => {
 				setTimeLeft((prevTime) => prevTime - 1);
 			}, 1000);
-		} if (timeLeft === 0) {
+		}
+		if (timeLeft === 0) {
 			setEndTime(Date.now());
 			setIsTestComplete(true);
-			
-		} if (isTestComplete )
-		{
-			console.log('pora')
-			navigate(`/result`)
+		}
+		if (isTestComplete) {
+			console.log("pora");
+			navigate(`/result`);
 		}
 
 		return () => {
@@ -118,7 +114,7 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		}
 	};
 	const formattedWpm = Number.isFinite(wpm) ? wpm.toFixed(0) : "Calculating...";
-	
+
 	let wrongLetters = 0;
 	const renderWords = () => {
 		const inputArray = inputText.split(/\s+/);
@@ -188,43 +184,57 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	};
 
 	return (
-		<>	{!!isTestComplete ? (<ResultPage/>) : (<div
-		className={classes.TestWordsWrapper}
-		style={{ fontFamily: "Arial", fontSize: "18px", lineHeight: "24px" }}
-	>
-		<button style = {{position:'absolute', top: 1 }} onClick={() => navigate(`/result`)}>dadadsadasdasd</button>
-		<div className={classes.TestWords}>
-			<p>{timeLeft} </p>
-			{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
-			<p>Words per Minute (WPM): {formattedWpm}</p>
-		</div>
-		<div
-			style={{ textAlign: "center", bottom: "80px", position: "absolute" }}
-		>
-			Press Tab to restart test.{" "}
-		</div>
-		<input
-			type="text"
-			ref={inputRef}
-			value={inputText}
-			onChange={handleInputChange}
-			style={{
-				fontSize: "18px",
-				padding: "5px",
-				width: "1px",
-				height: "1px",
-				position: "absolute",
-				top: "-100px",
-				left: "-100px",
-				opacity: 0,
-				overflow: "hidden",
-			}}
-		/>
-		{/* {isTestStarted && !isTestComplete && (
+		<>
+			{" "}
+			{!!isTestComplete ? (
+				<ResultPage wpm={'isTestStarted'} time={timeLeft} />
+			) : (
+				<div
+					className={classes.TestWordsWrapper}
+					style={{ fontFamily: "Arial", fontSize: "18px", lineHeight: "24px" }}
+				>
+					<button
+						style={{ position: "absolute", top: 1 }}
+						onClick={() => navigate(`/result`)}
+					>
+						dadadsadasdasd
+					</button>
+					<div className={classes.TestWords}>
+						<p>{timeLeft} </p>
+						{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
+						<p>Words per Minute (WPM): {formattedWpm}</p>
+					</div>
+					<div
+						style={{
+							textAlign: "center",
+							bottom: "80px",
+							position: "absolute",
+						}}
+					>
+						Press Tab to restart test.{" "}
+					</div>
+					<input
+						type="text"
+						ref={inputRef}
+						value={inputText}
+						onChange={handleInputChange}
+						style={{
+							fontSize: "18px",
+							padding: "5px",
+							width: "1px",
+							height: "1px",
+							position: "absolute",
+							top: "-100px",
+							left: "-100px",
+							opacity: 0,
+							overflow: "hidden",
+						}}
+					/>
+					{/* {isTestStarted && !isTestComplete && (
 			// <Timer  />
 		)} */}
-	</div>) }
-			
+				</div>
+			)}
 		</>
 	);
 };

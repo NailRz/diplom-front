@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ResultWpm } from '../../components/context';
 
-const ResultPage = () => {
+const ResultPage = ({wpm, time}) => {
+    console.log(wpm, time)
     return (
         <div>
             <h1>Your results: </h1>
-            <h2> Words per Minute: </h2>
+            {/* <h2> Time: {time}</h2> */}
+            {/* <h2> Words per Minute: {wpm}</h2> */}
         </div>
     );
 };
