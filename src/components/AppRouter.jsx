@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useContext } from "react";
 import routes from "../router/routes";
 import {useRoutes} from 'react-router-dom'

@@ -1,23 +1,42 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import { useState, useRef, useEffect, useMemo } from "react";
 import useWpmCalculator from "../hooks/useWpm.jsx";
 import classes from "./TypingTest.module.css";
 import { useNavigate } from "react-router-dom";
 import ResultPage from "../../pages/testPage/ResultPage.jsx";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { changeTime, changeWpm, updateTime, updateWpm } from "../../features/testData/testDataSlice.js";
+import { selectIsTestComplete, updateIsTestComplete } from "../../features/testStatesSlice/testStatesSlice.js";
 
-const TypingTest = ({ wordsProp, isWordsLoading }) => {
+
+const TypingTest = ({ wordsProp, isWordsLoading}) => {
+	
+
 	const [inputText, setInputText] = useState("");
 	const [words, setWords] = useState([]);
-	// setWords(wordsProp)
 	const inputRef = useRef(null);
 	const [startTime, setStartTime] = useState(0);
 	const [endTime, setEndTime] = useState(0);
 	const [wordCount, setWordCount] = useState(0);
 	const [isTestStarted, setIsTestStarted] = useState(false);
-	const [isTestComplete, setIsTestComplete] = useState(false);
+	// const [isTestComplete, setIsTestComplete] = useState(false);
+	const isTestComplete = useSelector(selectIsTestComplete)
 	const [isTestInvalid, setIsTestInvalid] = useState(false);
 	const [timeLeft, setTimeLeft] = useState(5);
 	const [isTyping, setIsTyping] = useState(false);
 	const wpm = useWpmCalculator(startTime, endTime, inputText, words);
+	let formattedWpm = Number.isFinite(wpm) ? wpm.toFixed(0) : "Calculating...";
+
+	const dispatch = useDispatch()
+	let saveTime = 0
+	if (saveTime < timeLeft ){
+		saveTime = timeLeft
+		dispatch(updateTime(saveTime))}
+
+	
+	
 
 	const navigate = useNavigate();
 
@@ -56,13 +75,15 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 				// setTimeLeft(5);
 				setIsTyping(true);
 				console.log("handleKeyDown");
+				// saveTime = timeLeft;	
+				console.log("sava", saveTime);
 			}
 
-			if (e.code === "Tab") {
-				setIsTestComplete(false);
-				e.preventDefault();
-				window.location.reload();
-			}
+			// if (e.code === "Tab") {
+			// 	dispatch(updateIsTestComplete(false))
+			// 	e.preventDefault();
+			// 	window.location.reload();
+			// }
 		};
 
 		window.addEventListener("keydown", handleKeyDown);
@@ -82,19 +103,25 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 				setTimeLeft((prevTime) => prevTime - 1);
 			}, 1000);
 		}
-		if (timeLeft === 0) {
-			setEndTime(Date.now());
-			setIsTestComplete(true);
-		}
+		
 		if (isTestComplete) {
 			console.log("pora");
-			navigate(`/result`);
 		}
 
 		return () => {
 			clearTimeout(timer);
 		};
 	}, [timeLeft, isTestComplete, isTestStarted]);
+
+	useEffect(() => {
+		if (timeLeft === 0) {
+			setEndTime(Date.now());
+			
+			dispatch(updateIsTestComplete(true))
+			dispatch(updateWpm(wpm))
+
+		}
+	}, [dispatch, formattedWpm, isTestComplete, timeLeft])
 
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
@@ -107,15 +134,13 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		if (userInput.length === words.length) {
 			setEndTime(Date.now());
 
-			setIsTestComplete(true);
+			dispatch(updateIsTestComplete(true));
+
 		} else {
 			// setEndTime(0);
-			setIsTestComplete(false);
+			dispatch(updateIsTestComplete(false));
 		}
 	};
-	const formattedWpm = Number.isFinite(wpm) ? wpm.toFixed(0) : "Calculating...";
-
-	let wrongLetters = 0;
 	const renderWords = () => {
 		const inputArray = inputText.split(/\s+/);
 		return words.map((word, wordIndex) => {
@@ -138,8 +163,6 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 								letterColor = "white";
 							} else {
 								letterColor = "red";
-								wrongLetters += 1;
-								// console.log(wrongLetters, 'wrongLetters')
 							}
 						}
 
@@ -185,56 +208,33 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	return (
 		<>
-			{" "}
-			{!!isTestComplete ? (
-				<ResultPage wpm={'isTestStarted'} time={timeLeft} />
-			) : (
-				<div
-					className={classes.TestWordsWrapper}
-					style={{ fontFamily: "Arial", fontSize: "18px", lineHeight: "24px" }}
-				>
-					<button
-						style={{ position: "absolute", top: 1 }}
-						onClick={() => navigate(`/result`)}
-					>
-						dadadsadasdasd
-					</button>
-					<div className={classes.TestWords}>
-						<p>{timeLeft} </p>
-						{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
-						<p>Words per Minute (WPM): {formattedWpm}</p>
-					</div>
-					<div
-						style={{
-							textAlign: "center",
-							bottom: "80px",
-							position: "absolute",
-						}}
-					>
-						Press Tab to restart test.{" "}
-					</div>
-					<input
-						type="text"
-						ref={inputRef}
-						value={inputText}
-						onChange={handleInputChange}
-						style={{
-							fontSize: "18px",
-							padding: "5px",
-							width: "1px",
-							height: "1px",
-							position: "absolute",
-							top: "-100px",
-							left: "-100px",
-							opacity: 0,
-							overflow: "hidden",
-						}}
-					/>
-					{/* {isTestStarted && !isTestComplete && (
-			// <Timer  />
-		)} */}
+			<div
+				className={classes.TestWordsWrapper}
+				style={{ fontFamily: "Arial", fontSize: "18px", lineHeight: "24px" }}
+			>
+				<div className={classes.TestWords}>
+					<p>{timeLeft} </p>
+					{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
+					<p>Words per Minute (WPM): {formattedWpm}</p>
 				</div>
-			)}
+				<input
+					type="text"
+					ref={inputRef}
+					value={inputText}
+					onChange={handleInputChange}
+					style={{
+						fontSize: "18px",
+						padding: "5px",
+						width: "1px",
+						height: "1px",
+						position: "absolute",
+						top: "-100px",
+						left: "-100px",
+						opacity: 0,
+						overflow: "hidden",
+					}}
+				/>
+			</div>
 		</>
 	);
 };
