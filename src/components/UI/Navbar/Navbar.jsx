@@ -1,9 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-
+import classes from './Navbar.module.css'
 const Navbar = () => {
     return (
-        <div className='navbar--wrapper'>
+        <div className = {classes.NavbarWrapper}>
             <Link to = '/profile'>Profile</Link>
         </div>
     );

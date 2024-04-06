@@ -7,76 +7,83 @@ import { useNavigate } from "react-router-dom";
 import ResultPage from "../../pages/testPage/ResultPage.jsx";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTime, changeWpm, updateTime, updateWpm } from "../../features/testData/testDataSlice.js";
-import { selectIsTestComplete, updateIsTestComplete } from "../../features/testStatesSlice/testStatesSlice.js";
+import {
+	selectEndTime,
+	selectStartTime,
+	updateEndTime,
+	updateStartTime,
+	updateTime,
+	updateWpm,
+} from "../../features/testData/testDataSlice.js";
+import {
+	selectIsTestComplete,
+	updateIsTestComplete,
+} from "../../features/testStatesSlice/testStatesSlice.js";
 
-
-const TypingTest = ({ wordsProp, isWordsLoading}) => {
-	
-
+const TypingTest = ({ wordsProp, isWordsLoading }) => {
+	const dispatch = useDispatch();
 	const [inputText, setInputText] = useState("");
 	const [words, setWords] = useState([]);
 	const inputRef = useRef(null);
-	const [startTime, setStartTime] = useState(0);
-	const [endTime, setEndTime] = useState(0);
+	// const [startTime, setStartTime] = useState(0);
+	// const [endTime, setEndTime] = useState(0);
 	const [wordCount, setWordCount] = useState(0);
 	const [isTestStarted, setIsTestStarted] = useState(false);
 	// const [isTestComplete, setIsTestComplete] = useState(false);
-	const isTestComplete = useSelector(selectIsTestComplete)
+	const isTestComplete = useSelector(selectIsTestComplete);
+	const startTime = useSelector(selectStartTime);
+	const endTime = useSelector(selectEndTime);
 	const [isTestInvalid, setIsTestInvalid] = useState(false);
-	const [timeLeft, setTimeLeft] = useState(5);
+	const [timeLeft, setTimeLeft] = useState(60);
 	const [isTyping, setIsTyping] = useState(false);
-	const wpm = useWpmCalculator(startTime, endTime, inputText, words);
+	const wpm = useWpmCalculator(
+		startTime,
+		endTime,
+		inputText,
+		words,
+		isTestComplete
+	);
+	useEffect(() => {
+		dispatch(updateWpm(wpm));
+	}, [isTestComplete, endTime, dispatch, wpm]);
 	let formattedWpm = Number.isFinite(wpm) ? wpm.toFixed(0) : "Calculating...";
 
-	const dispatch = useDispatch()
-	let saveTime = 0
-	if (saveTime < timeLeft ){
-		saveTime = timeLeft
-		dispatch(updateTime(saveTime))}
-
-	
-	
+	const [saveTime, setSaveTime] = useState(-1);
+	if (timeLeft > saveTime) {
+		console.log("New maximum timeLeft:", timeLeft);
+		setSaveTime(timeLeft);
+		dispatch(updateTime(timeLeft));
+	}
 
 	const navigate = useNavigate();
 
-	// const flatWordsArr = wordsProp ? wordsProp.flatMap(word => word.split(', ')) : [];
-	// const flatWordsArr = wordsProp.flatMap(word => word.split(', '));
-	// console.log(flatWordsArr)
-
-	// const flatWordsArr = wordsProp.reduce((acc, word) => {
-	// 	const words = word.split(', ');
-	// 	return [...acc, ...words];
-	//   }, []);
-
-	//   console.log(flatWordsArr)
-	const flatWordsArr = useMemo(() => {
-		return wordsProp ? wordsProp.flatMap((word) => word.split(", ")) : [];
-	}, [wordsProp]);
-
 	useEffect(() => {
-		if (flatWordsArr.length > 2) {
-			setWords(flatWordsArr.sort(() => Math.random() - 0.5));
-		}
-	}, [flatWordsArr]);
+			setWords(wordsProp ? wordsProp : []);
+	}, [wordsProp]);
 
 	const startTest = () => {
 		if (inputText.length === 0 && !isTestComplete) {
-			setStartTime(Date.now());
+			dispatch(updateStartTime(Date.now()));
+			console.log(startTime, "starttime");
 			setIsTestStarted(true);
 			inputRef.current.focus();
 		}
 	};
 
 	useEffect(() => {
+		console.log(startTime, endTime);
+	}, [startTime, endTime]);
+
+	useEffect(() => {
 		const handleKeyDown = (e) => {
 			if (!isTyping) {
 				startTest();
 				// setTimeLeft(5);
+				// dispatch(updateEndTime(Date.now()))
 				setIsTyping(true);
 				console.log("handleKeyDown");
-				// saveTime = timeLeft;	
-				console.log("sava", saveTime);
+				// saveTime = timeLeft;
+				// console.log("sava", saveTime);
 			}
 
 			// if (e.code === "Tab") {
@@ -101,9 +108,12 @@ const TypingTest = ({ wordsProp, isWordsLoading}) => {
 			console.log("da");
 			timer = setTimeout(() => {
 				setTimeLeft((prevTime) => prevTime - 1);
+				dispatch(updateEndTime(Date.now()));
 			}, 1000);
 		}
-		
+		if (timeLeft === 0) {
+			dispatch(updateEndTime(Date.now()));
+		}
 		if (isTestComplete) {
 			console.log("pora");
 		}
@@ -115,27 +125,27 @@ const TypingTest = ({ wordsProp, isWordsLoading}) => {
 
 	useEffect(() => {
 		if (timeLeft === 0) {
-			setEndTime(Date.now());
-			
-			dispatch(updateIsTestComplete(true))
-			dispatch(updateWpm(wpm))
+			dispatch(updateEndTime(Date.now()));
+			console.log(Date.now());
 
+			dispatch(updateWpm(wpm));
+			dispatch(updateIsTestComplete(true));
 		}
-	}, [dispatch, formattedWpm, isTestComplete, timeLeft])
+	}, [dispatch, formattedWpm, isTestComplete, timeLeft, wpm]);
 
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
 		setInputText(userInput);
+		dispatch(updateEndTime(Date.now()));
 
 		if (userInput.trim().split(/\s+/).length > 0) {
 			setWordCount(userInput.trim().split(/\s+/).length);
 		}
 
 		if (userInput.length === words.length) {
-			setEndTime(Date.now());
+			// setEndTime(Date.now());
 
-			dispatch(updateIsTestComplete(true));
-
+			// dispatch(updateIsTestComplete(true));
 		} else {
 			// setEndTime(0);
 			dispatch(updateIsTestComplete(false));
@@ -206,6 +216,12 @@ const TypingTest = ({ wordsProp, isWordsLoading}) => {
 		});
 	};
 
+	const selectorHandler = (event) => {
+		setTimeLeft(event.target.value);
+		dispatch(updateTime(event.target.value));
+		console.log(event.target.value);
+	};
+
 	return (
 		<>
 			<div
@@ -217,6 +233,18 @@ const TypingTest = ({ wordsProp, isWordsLoading}) => {
 					{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
 					<p>Words per Minute (WPM): {formattedWpm}</p>
 				</div>
+				<select
+					value={timeLeft}
+					onChange={selectorHandler}
+					// defaultValue={'Выберете время'}
+					style={{ position: "absolute", top: "15px" }}
+				>
+					<option value="">Выберите значение</option>
+					<option value={5}>5</option>
+					<option value={15}>15</option>
+					<option value={30}>30</option>
+					<option value={60}>60</option>
+				</select>
 				<input
 					type="text"
 					ref={inputRef}

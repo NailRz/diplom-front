@@ -12,14 +12,14 @@ import {
 } from "../../features/testStatesSlice/testStatesSlice";
 import store from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTime, changeWpm, updateTime } from "../../features/testData/testDataSlice";
+import { selectWpm} from "../../features/testData/testDataSlice";
 
 const TestPage = () => {
 	const dispatch = useDispatch();
 	const isTyping = useSelector(selectIsTyping);
 	// const finalTime = useSelector(changeTime)
 	// console.log(finalTime)
-	const finalWpm = useSelector(changeWpm)
+	const finalWpm = useSelector(selectWpm)
 	const [wordsArr, setWordsArr] = useState(null);
 	const isTestComplete = useSelector(selectIsTestComplete);
 
@@ -27,13 +27,13 @@ const TestPage = () => {
 		const response = await Service.getAll();
 		console.log(response.data);
 		if (postError) console.log(postError);
-		const arr = [];
-		for (let i = 0; i < response.data.length; i++) {
-			arr.push(response.data[i].words);
-		}
-		console.log(arr);
+		// const arr = [];
+		// for (let i = 0; i < response.data.length; i++) {
+		// 	arr.push(response.data[i].words);
+		// }
+		// console.log(arr);
 
-		setWordsArr(arr);
+		setWordsArr(response.data);
 	});
 
 	useEffect(() => {
