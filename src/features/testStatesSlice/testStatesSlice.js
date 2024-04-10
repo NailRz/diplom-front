@@ -6,6 +6,7 @@ export const testStates = createSlice({
         isTestStart: false,
         isTestComplete: false,
         isTyping:false,
+        isTestInvalid: false,
     },
     reducers: {
         updateIsTyping: (state, action) => {
@@ -14,7 +15,7 @@ export const testStates = createSlice({
         updateIsTestComplete: (state, action) => {
             state.isTestComplete = action.payload;
         },
-        updateWpm: (state, action) => {
+        updateIsTestInvalid: (state, action) => {
             state.wpm = action.payload;
         },
     }
@@ -22,6 +23,7 @@ export const testStates = createSlice({
 
 export const selectIsTyping = (state) => state.testStates.isTyping
 export const selectIsTestComplete = (state) => state.testStates.isTestComplete
+export const selectIsTestInvalid = (state) => state.testStates.isTestInvalid
 
-export const {updateIsTyping, updateIsTestComplete} = testStates.actions
+export const {updateIsTyping, updateIsTestComplete, updateIsTestInvalid} = testStates.actions
 export default testStates.reducer

@@ -13,6 +13,7 @@ import {
 import store from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { selectWpm} from "../../features/testData/testDataSlice";
+import classes from './TestPage.module.css'
 
 const TestPage = () => {
 	const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const TestPage = () => {
 	}, [dispatch, isTyping]);
 
 	return (
-		<div className="TestPage">
+		<div className={classes.TestPage}>
 			{/* <button onClick={() => navigate(`/results`)}></button> */}
 			{isTestComplete ? (
 				<ResultPage time={5} wpm = {finalWpm}/>
@@ -71,7 +72,7 @@ const TestPage = () => {
 					position: "absolute",
 				}}
 			>
-				Press Tab to restart test.{" "}
+				Press Tab to restart test.
 			</div>
 		</div>
 	);

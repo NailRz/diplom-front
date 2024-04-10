@@ -29,6 +29,7 @@ const useWpmCalculator = (
 		);
 
 		const calculatedWpm = correctCharacters / 5 / timeElapsed;
+		// const accuracy = correctCharacters / 
 		setWpm(calculatedWpm);
 		
 	}, [inputText, words, startTime, endTime, isTestComplete, timeElapsed]);

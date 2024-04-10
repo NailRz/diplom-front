@@ -9,33 +9,48 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	selectEndTime,
+	selectInputText,
 	selectStartTime,
+	selectWords,
 	updateEndTime,
+	updateInputText,
 	updateStartTime,
 	updateTime,
+	updateWords,
 	updateWpm,
 } from "../../features/testData/testDataSlice.js";
 import {
 	selectIsTestComplete,
 	updateIsTestComplete,
 } from "../../features/testStatesSlice/testStatesSlice.js";
+import UpdateHandler from "../UpdateHandler.jsx";
+import testAccuracy from "../testAccuracy.jsx";
+import getWordErrorIndex from "../addErrorToArray.jsx";
+import addErrorToArray from "../addErrorToArray.jsx";
 
 const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const dispatch = useDispatch();
-	const [inputText, setInputText] = useState("");
-	const [words, setWords] = useState([]);
+	// const [inputText, setInputText] = useState("");
+	// const [words, setWords] = useState([]);
+	const words = useSelector(selectWords);
+	const inputText = useSelector(selectInputText);
+
 	const inputRef = useRef(null);
+	const caretRef = useRef();
+	const wordRef = useRef();
 	// const [startTime, setStartTime] = useState(0);
 	// const [endTime, setEndTime] = useState(0);
 	const [wordCount, setWordCount] = useState(0);
 	const [isTestStarted, setIsTestStarted] = useState(false);
-	// const [isTestComplete, setIsTestComplete] = useState(false);
+	const [isTestCompleted, setIsTestCompleted] = useState(false);
 	const isTestComplete = useSelector(selectIsTestComplete);
 	const startTime = useSelector(selectStartTime);
 	const endTime = useSelector(selectEndTime);
 	const [isTestInvalid, setIsTestInvalid] = useState(false);
 	const [timeLeft, setTimeLeft] = useState(60);
 	const [isTyping, setIsTyping] = useState(false);
+	const [uncorrectCharacters, setUncorrectCharacters] = useState(0);
+	const [errorArray, setErrorArray] = useState([]);
 	const wpm = useWpmCalculator(
 		startTime,
 		endTime,
@@ -57,8 +72,15 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	const navigate = useNavigate();
 
+	// useEffect(() => {
+	// 	if (isTestComplete){
+	// 		handleInputChange()
+	// 	}
+	// },[isTestComplete])
+
 	useEffect(() => {
-			setWords(wordsProp ? wordsProp : []);
+		// setWords(wordsProp ? wordsProp : []);
+		dispatch(updateWords(wordsProp ? wordsProp : []));
 	}, [wordsProp]);
 
 	const startTest = () => {
@@ -121,7 +143,7 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [timeLeft, isTestComplete, isTestStarted]);
+	}, [timeLeft, isTestComplete, isTestStarted, dispatch]);
 
 	useEffect(() => {
 		if (timeLeft === 0) {
@@ -129,14 +151,58 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 			console.log(Date.now());
 
 			dispatch(updateWpm(wpm));
+			// UpdateHandler(inputText,words)
 			dispatch(updateIsTestComplete(true));
 		}
 	}, [dispatch, formattedWpm, isTestComplete, timeLeft, wpm]);
 
+	// useEffect(()=>{
+	// 	UpdateHandler(inputText,words)
+	// },[inputText, isTestComplete, words])
+	// const caretRef = useRef(null);
+	// console.log(caretRef, "ВЫСОТА КАРЕТКИ");
+
+	// useEffect(() => {
+	// 	if (caretRef.current) {
+	// 		const height = caretRef.current.offsetHeight;
+	// 		console.log(height, "ВЫСОТА КАРЕТКИ");
+	// 	}
+	// }, []);
+
+	// const [caretRect, setCaretRect] = useState()
+	// if (caretRef) {
+	// 	const mama = caretRef.current.getBoundingClientRect()
+	// 	setCaretRect(mama)
+	// }
+	const [rowCount, setRowCount] = useState(0);
+	const [caretHeight, setCaretHeight] = useState(-1);
+	const [translateY, setTranslateY] = useState(0);
+	const [rowFlag, setRowFlag] = useState(0);
+
+	useEffect(() => {
+		console.log(caretHeight, "useEffectuseEffect");
+		if (caretHeight != -1) {
+			if (rowFlag === 0) {
+				setRowCount((prevRowCount) => prevRowCount + 1);
+				setTranslateY(rowCount * -40);
+				setRowFlag(1);
+			}
+		}
+		if (rowFlag === 1)
+		{setRowFlag(0);}
+	}, [caretHeight]);
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
-		setInputText(userInput);
+		if (userInput) {
+			const caretRect = caretRef.current.getBoundingClientRect().y.toFixed(0);
+			const caretH = caretRect;
+			setCaretHeight(caretRect);
+		}
+
+		dispatch(updateInputText(userInput));
 		dispatch(updateEndTime(Date.now()));
+
+		// testAccuracy(inputText,words)
 
 		if (userInput.trim().split(/\s+/).length > 0) {
 			setWordCount(userInput.trim().split(/\s+/).length);
@@ -144,24 +210,29 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 		if (userInput.length === words.length) {
 			// setEndTime(Date.now());
-
 			// dispatch(updateIsTestComplete(true));
 		} else {
 			// setEndTime(0);
 			dispatch(updateIsTestComplete(false));
 		}
+		setErrorArray(addErrorToArray(inputText, words, errorArray));
 	};
+	console.log(rowCount, "rowcount");
 	const renderWords = () => {
 		const inputArray = inputText.split(/\s+/);
 		return words.map((word, wordIndex) => {
 			let wordLetters = word.split("");
 			let enteredWord = inputArray[wordIndex] || "";
-
 			return (
+				// <div key>
 				<div
 					key={wordIndex}
+					// ref={wordRef}
 					className={classes.Word}
-					style={{ position: "relative" }}
+					style={{
+						position: "relative",
+						transform: `translateY(${translateY}px)`,
+					}}
 				>
 					{wordLetters.map((letter, letterIndex) => {
 						let inputLetter = enteredWord[letterIndex];
@@ -171,7 +242,8 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 						if (inputLetter !== undefined) {
 							if (inputLetter === letter) {
 								letterColor = "white";
-							} else {
+							}
+							if (inputLetter != letter) {
 								letterColor = "red";
 							}
 						}
@@ -202,6 +274,7 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					{wordIndex === inputArray.length - 1 && (
 						<span
 							className={isTestStarted ? classes.CaretS : classes.Caret}
+							ref={caretRef}
 							style={{
 								position: "absolute",
 								left: enteredWord.length * 13.75 + "px",
@@ -211,7 +284,11 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 							}}
 						/>
 					)}
+					{/* {wordIndex === inputArray.length - 1 && caretRef.current && (
+          <div>{console.log(x, 'ВЫСОТА МАТЬ ВАШУ')}</div> // отображаем высоту текущего элемента каретки
+        )} */}
 				</div>
+				// </div>
 			);
 		});
 	};
@@ -226,11 +303,13 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		<>
 			<div
 				className={classes.TestWordsWrapper}
-				style={{ fontFamily: "Arial", fontSize: "18px", lineHeight: "24px" }}
+				style={{ fontSize: "18px", lineHeight: "24px" }}
 			>
 				<div className={classes.TestWords}>
 					<p>{timeLeft} </p>
-					{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
+					<div className={classes.WordsWrapper}>
+						{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
+					</div>
 					<p>Words per Minute (WPM): {formattedWpm}</p>
 				</div>
 				<select
@@ -245,21 +324,28 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					<option value={30}>30</option>
 					<option value={60}>60</option>
 				</select>
-				<input
+				<textarea
+					rows={1}
 					type="text"
 					ref={inputRef}
 					value={inputText}
 					onChange={handleInputChange}
 					style={{
-						fontSize: "18px",
+						fontSize: "25px",
+						fontFamily: "monospace",
 						padding: "5px",
-						width: "1px",
-						height: "1px",
+						// width: "1px",
+						// height: "1px",
 						position: "absolute",
-						top: "-100px",
-						left: "-100px",
-						opacity: 0,
+						top: "220px",
+						left: "20px",
+						// top: "-100px",
+						// left: "-100px",
+						// opacity: 0,
 						overflow: "hidden",
+						width: "915px",
+						// whiteSpace:'pre-wrap',
+						resize: "none",
 					}}
 				/>
 			</div>
