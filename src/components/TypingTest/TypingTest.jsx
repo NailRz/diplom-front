@@ -173,29 +173,36 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	// if (caretRef) {
 	// 	const mama = caretRef.current.getBoundingClientRect()
 	// 	setCaretRect(mama)
-	// }
-	const [rowCount, setRowCount] = useState(0);
-	const [caretHeight, setCaretHeight] = useState(-1);
+	// // }
+	// const [rowCount, setRowCount] = useState(0);
+	// const [caretHeight, setCaretHeight] = useState(-1);
 	const [translateY, setTranslateY] = useState(0);
 	const [rowFlag, setRowFlag] = useState(0);
+	const [rowFlag2, setRowFlag2] = useState(0);
+
+	const [caretHeight, setCaretHeight] = useState(0);
+	const [prevCaretHeight, setPrevCaretHeight] = useState(0);
+	const [rowCount, setRowCount] = useState(0);
+	const rowThreshold = 36.5; // высота одной строки
 
 	useEffect(() => {
-		console.log(caretHeight, "useEffectuseEffect");
-		if (caretHeight != -1) {
-			if (rowFlag === 0) {
-				setRowCount((prevRowCount) => prevRowCount + 1);
-				setTranslateY(rowCount * -40);
-				setRowFlag(1);
-			}
+		if (caretHeight != prevCaretHeight) {
+			rowFlag2 ? setRowFlag((prev) => !prev) : setRowFlag2((prev) => !prev)
+			if (rowFlag)
+			{caretHeight > prevCaretHeight ? setRowCount((prev) => prev + 1) : setRowCount ((prev) => prev - 1)}
+
 		}
-		if (rowFlag === 1)
-		{setRowFlag(0);}
-	}, [caretHeight]);
+		setPrevCaretHeight(caretHeight)
+	}, [caretHeight, prevCaretHeight, rowFlag, rowFlag2]);
+	// useEffect(() => {
+	// 	if (rowFlag) {
+	// 	}
+	// }, [rowFlag]);
+
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
 		if (userInput) {
 			const caretRect = caretRef.current.getBoundingClientRect().y.toFixed(0);
-			const caretH = caretRect;
 			setCaretHeight(caretRect);
 		}
 
@@ -231,7 +238,7 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					className={classes.Word}
 					style={{
 						position: "relative",
-						transform: `translateY(${translateY}px)`,
+						transform: `translateY(${rowCount < 0 ? 0 : rowCount * -36.5}px)`,
 					}}
 				>
 					{wordLetters.map((letter, letterIndex) => {
