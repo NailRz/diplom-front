@@ -256,7 +256,9 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					<div className={classes.WordsWrapper}>
 						{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
 					</div>
-					<p>Words per Minute (WPM): {formattedWpm}</p>
+					<div className={classes.WpmWrapper}>
+						<p>Words per Minute (WPM): {formattedWpm}</p>
+					</div>
 				</div>
 				<select
 					value={timeLeft}
@@ -279,8 +281,8 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 						fontSize: "25px",
 						fontFamily: "monospace",
 						padding: "5px",
-						// width: "1px",
-						// height: "1px",
+						width: "1px",
+						height: "1px",
 						position: "absolute",
 						// top: "220px",
 						// left: "20px",
@@ -288,7 +290,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 						left: "-100px",
 						// opacity: 0,
 						overflow: "hidden",
-						width: "915px",
+						// width: "915px",
 						// whiteSpace:'pre-wrap',
 						resize: "none",
 					}}
@@ -298,4 +300,3 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	);
 };
 // export default TypingTest;
-
