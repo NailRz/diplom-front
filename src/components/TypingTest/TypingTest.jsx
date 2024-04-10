@@ -23,26 +23,18 @@ import {
 	selectIsTestComplete,
 	updateIsTestComplete,
 } from "../../features/testStatesSlice/testStatesSlice.js";
-import UpdateHandler from "../UpdateHandler.jsx";
-import testAccuracy from "../testAccuracy.jsx";
-import getWordErrorIndex from "../addErrorToArray.jsx";
 import addErrorToArray from "../addErrorToArray.jsx";
 
-const TypingTest = ({ wordsProp, isWordsLoading }) => {
+export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const dispatch = useDispatch();
-	// const [inputText, setInputText] = useState("");
-	// const [words, setWords] = useState([]);
 	const words = useSelector(selectWords);
 	const inputText = useSelector(selectInputText);
 
 	const inputRef = useRef(null);
 	const caretRef = useRef();
 	const wordRef = useRef();
-	// const [startTime, setStartTime] = useState(0);
-	// const [endTime, setEndTime] = useState(0);
 	const [wordCount, setWordCount] = useState(0);
 	const [isTestStarted, setIsTestStarted] = useState(false);
-	const [isTestCompleted, setIsTestCompleted] = useState(false);
 	const isTestComplete = useSelector(selectIsTestComplete);
 	const startTime = useSelector(selectStartTime);
 	const endTime = useSelector(selectEndTime);
@@ -65,54 +57,36 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	const [saveTime, setSaveTime] = useState(-1);
 	if (timeLeft > saveTime) {
-		console.log("New maximum timeLeft:", timeLeft);
 		setSaveTime(timeLeft);
 		dispatch(updateTime(timeLeft));
 	}
 
 	const navigate = useNavigate();
 
-	// useEffect(() => {
-	// 	if (isTestComplete){
-	// 		handleInputChange()
-	// 	}
-	// },[isTestComplete])
-
 	useEffect(() => {
-		// setWords(wordsProp ? wordsProp : []);
 		dispatch(updateWords(wordsProp ? wordsProp : []));
 	}, [wordsProp]);
 
 	const startTest = () => {
 		if (inputText.length === 0 && !isTestComplete) {
 			dispatch(updateStartTime(Date.now()));
-			console.log(startTime, "starttime");
+			// console.log(startTime, "starttime");
 			setIsTestStarted(true);
 			inputRef.current.focus();
 		}
 	};
 
-	useEffect(() => {
-		console.log(startTime, endTime);
-	}, [startTime, endTime]);
+	// useEffect(() => {
+	// 	// console.log(startTime, endTime);
+	// }, [startTime, endTime]);
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			if (!isTyping) {
 				startTest();
-				// setTimeLeft(5);
-				// dispatch(updateEndTime(Date.now()))
 				setIsTyping(true);
-				console.log("handleKeyDown");
-				// saveTime = timeLeft;
-				// console.log("sava", saveTime);
+				// console.log("handleKeyDown");
 			}
-
-			// if (e.code === "Tab") {
-			// 	dispatch(updateIsTestComplete(false))
-			// 	e.preventDefault();
-			// 	window.location.reload();
-			// }
 		};
 
 		window.addEventListener("keydown", handleKeyDown);
@@ -124,10 +98,8 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	useEffect(() => {
 		let timer;
-		console.log(timeLeft, isTestComplete, isTestStarted);
 
 		if (timeLeft > 0 && !isTestComplete && isTestStarted) {
-			console.log("da");
 			timer = setTimeout(() => {
 				setTimeLeft((prevTime) => prevTime - 1);
 				dispatch(updateEndTime(Date.now()));
@@ -151,53 +123,28 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 			console.log(Date.now());
 
 			dispatch(updateWpm(wpm));
-			// UpdateHandler(inputText,words)
 			dispatch(updateIsTestComplete(true));
 		}
 	}, [dispatch, formattedWpm, isTestComplete, timeLeft, wpm]);
 
-	// useEffect(()=>{
-	// 	UpdateHandler(inputText,words)
-	// },[inputText, isTestComplete, words])
-	// const caretRef = useRef(null);
-	// console.log(caretRef, "ВЫСОТА КАРЕТКИ");
-
-	// useEffect(() => {
-	// 	if (caretRef.current) {
-	// 		const height = caretRef.current.offsetHeight;
-	// 		console.log(height, "ВЫСОТА КАРЕТКИ");
-	// 	}
-	// }, []);
-
-	// const [caretRect, setCaretRect] = useState()
-	// if (caretRef) {
-	// 	const mama = caretRef.current.getBoundingClientRect()
-	// 	setCaretRect(mama)
-	// // }
-	// const [rowCount, setRowCount] = useState(0);
-	// const [caretHeight, setCaretHeight] = useState(-1);
-	const [translateY, setTranslateY] = useState(0);
 	const [rowFlag, setRowFlag] = useState(0);
 	const [rowFlag2, setRowFlag2] = useState(0);
 
 	const [caretHeight, setCaretHeight] = useState(0);
 	const [prevCaretHeight, setPrevCaretHeight] = useState(0);
 	const [rowCount, setRowCount] = useState(0);
-	const rowThreshold = 36.5; // высота одной строки
 
 	useEffect(() => {
 		if (caretHeight != prevCaretHeight) {
-			rowFlag2 ? setRowFlag((prev) => !prev) : setRowFlag2((prev) => !prev)
-			if (rowFlag)
-			{caretHeight > prevCaretHeight ? setRowCount((prev) => prev + 1) : setRowCount ((prev) => prev - 1)}
-
+			rowFlag2 ? setRowFlag((prev) => !prev) : setRowFlag2((prev) => !prev);
+			if (rowFlag) {
+				caretHeight > prevCaretHeight
+					? setRowCount((prev) => prev + 1)
+					: setRowCount((prev) => prev - 1);
+			}
 		}
-		setPrevCaretHeight(caretHeight)
+		setPrevCaretHeight(caretHeight);
 	}, [caretHeight, prevCaretHeight, rowFlag, rowFlag2]);
-	// useEffect(() => {
-	// 	if (rowFlag) {
-	// 	}
-	// }, [rowFlag]);
 
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
@@ -208,6 +155,7 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 		dispatch(updateInputText(userInput));
 		dispatch(updateEndTime(Date.now()));
+		console.log(rowCount, "rowcount");
 
 		// testAccuracy(inputText,words)
 
@@ -217,24 +165,19 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 		if (userInput.length === words.length) {
 			// setEndTime(Date.now());
-			// dispatch(updateIsTestComplete(true));
 		} else {
-			// setEndTime(0);
 			dispatch(updateIsTestComplete(false));
 		}
 		setErrorArray(addErrorToArray(inputText, words, errorArray));
 	};
-	console.log(rowCount, "rowcount");
 	const renderWords = () => {
 		const inputArray = inputText.split(/\s+/);
 		return words.map((word, wordIndex) => {
 			let wordLetters = word.split("");
 			let enteredWord = inputArray[wordIndex] || "";
 			return (
-				// <div key>
 				<div
 					key={wordIndex}
-					// ref={wordRef}
 					className={classes.Word}
 					style={{
 						position: "relative",
@@ -291,11 +234,7 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 							}}
 						/>
 					)}
-					{/* {wordIndex === inputArray.length - 1 && caretRef.current && (
-          <div>{console.log(x, 'ВЫСОТА МАТЬ ВАШУ')}</div> // отображаем высоту текущего элемента каретки
-        )} */}
 				</div>
-				// </div>
 			);
 		});
 	};
@@ -322,7 +261,6 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 				<select
 					value={timeLeft}
 					onChange={selectorHandler}
-					// defaultValue={'Выберете время'}
 					style={{ position: "absolute", top: "15px" }}
 				>
 					<option value="">Выберите значение</option>
@@ -344,10 +282,10 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 						// width: "1px",
 						// height: "1px",
 						position: "absolute",
-						top: "220px",
-						left: "20px",
-						// top: "-100px",
-						// left: "-100px",
+						// top: "220px",
+						// left: "20px",
+						top: "-100px",
+						left: "-100px",
 						// opacity: 0,
 						overflow: "hidden",
 						width: "915px",
@@ -359,4 +297,5 @@ const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		</>
 	);
 };
-export default TypingTest;
+// export default TypingTest;
+

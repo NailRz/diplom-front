@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import TypingTest from "../../components/TypingTest/TypingTest";
+import { TypingTest } from "../../components/TypingTest/TypingTest";
 import ResultPage from "./ResultPage";
 import Service from "../../API/Service";
 import { useFetching } from "../../components/hooks/useFetching";
@@ -12,15 +12,15 @@ import {
 } from "../../features/testStatesSlice/testStatesSlice";
 import store from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { selectWpm} from "../../features/testData/testDataSlice";
-import classes from './TestPage.module.css'
+import { selectWpm } from "../../features/testData/testDataSlice";
+import classes from "./TestPage.module.css";
 
 const TestPage = () => {
 	const dispatch = useDispatch();
 	const isTyping = useSelector(selectIsTyping);
 	// const finalTime = useSelector(changeTime)
 	// console.log(finalTime)
-	const finalWpm = useSelector(selectWpm)
+	const finalWpm = useSelector(selectWpm);
 	const [wordsArr, setWordsArr] = useState(null);
 	const isTestComplete = useSelector(selectIsTestComplete);
 
@@ -61,7 +61,7 @@ const TestPage = () => {
 		<div className={classes.TestPage}>
 			{/* <button onClick={() => navigate(`/results`)}></button> */}
 			{isTestComplete ? (
-				<ResultPage time={5} wpm = {finalWpm}/>
+				<ResultPage time={5} wpm={finalWpm} />
 			) : (
 				<TypingTest wordsProp={wordsArr} isWordsLoading={isWordsLoading} />
 			)}
