@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 
-const Timer = ({ timeLeft, isTestComplete }) => {
-  
-  useEffect(() => {
-    
+const Timer = ({ prevTimeLeft, isTestComplete }) => {
+	const [timeLeft, setTimeLeft] = useState(prevTimeLeft);
+	useEffect(() => {
 		let timer;
-		if (timeLeft > 0 && !isTestComplete) {
+
+		if (timeLeft > 0 && !isTestComplete && isTestStarted) {
 			timer = setTimeout(() => {
+				// console.log(timeLeft - 1);
 				setTimeLeft((prevTime) => prevTime - 1);
 			}, 1000);
-		} else if (timeLeft === 0) {
-			setEndTime(Date.now());
-			setIsTestComplete(true);
+			dispatch(updateEndTime(Date.now()));
+		}
+		if (timeLeft === 0) {
+			dispatch(updateEndTime(Date.now()));
 		}
 
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [timeLeft, isTestComplete]);
-  return <p>Time Left: {timeLeft} seconds</p>;
+	}, [timeLeft, isTestComplete, isTestStarted]);
+  return {timeLeft}
 };
 
 

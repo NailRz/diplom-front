@@ -44,18 +44,20 @@ const TestPage = () => {
 		fetchWords();
 	}, [refreshWords]);
 
-	
-
-	useEffect(() => {
-		const handleKeyDown = (e) => {
-			if (e.code === "Tab") {
-				setIsRestart(true)
+	const restartTest = () => {
+		setIsRestart(true)
 				dispatch(resetData()),
 				dispatch(resetStates())
 				setRefreshWords((prev) => !prev)
 				setTimeout(() => {
 					setIsRestart(false)
 				})
+	}
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.code === "Tab") {
+				restartTest()
 			}
 		};
 
@@ -83,6 +85,8 @@ const TestPage = () => {
 			>
 				Press Tab to restart test.
 			</div>
+			{/* <button onClick={restartTest}>Restart</button> */}
+
 		</div>
 	);
 };

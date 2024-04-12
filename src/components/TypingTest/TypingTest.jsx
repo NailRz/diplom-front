@@ -39,17 +39,16 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const startTime = useSelector(selectStartTime);
 	const endTime = useSelector(selectEndTime);
 	const [timeLeft, setTimeLeft] = useState(60);
-	const [testDuration, setTestDuration] = useState(60)
+	const [testDuration, setTestDuration] = useState(60);
 	const [isTyping, setIsTyping] = useState(false);
 	const [errorArray, setErrorArray] = useState([]);
 
 	useEffect(() => {
-		if(localStorage.getItem('testDuration')){
-			// console.log(localStorage.getItem('testDuration'))
-			setTimeLeft(localStorage.getItem('testDuration'))
-			setTestDuration(localStorage.getItem('testDuration'))
+		if (localStorage.getItem("testDuration")) {
+			setTimeLeft(localStorage.getItem("testDuration"));
+			setTestDuration(localStorage.getItem("testDuration"));
 		}
-	},[])
+	}, []);
 
 	const wpm = useWpmCalculator(
 		startTime,
@@ -191,9 +190,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 				>
 					{wordLetters.map((letter, letterIndex) => {
 						let inputLetter = enteredWord[letterIndex];
-
 						let letterColor = "#596172";
-
 						if (inputLetter !== undefined) {
 							if (inputLetter === letter) {
 								letterColor = "white";
@@ -206,23 +203,14 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 						return (
 							<span
 								key={letterIndex}
-								style={{
-									color: letterColor,
-								}}
+								style={{color: letterColor}}
 							>
 								{letter}
 							</span>
 						);
 					})}
 					{enteredWord.length > word.length && (
-						<span
-							key={wordIndex}
-							style={{
-								color: "red",
-								// fontSize: "16px",
-								// fontWeight: "bold",
-							}}
-						>
+						<span key={wordIndex} style={{ color: "red" }}>
 							{enteredWord.slice(word.length)}
 						</span>
 					)}
@@ -230,13 +218,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 						<span
 							className={isTestStarted ? classes.CaretS : classes.Caret}
 							ref={caretRef}
-							style={{
-								position: "absolute",
-								left: enteredWord.length * 13.75 + "px",
-								height: "100%",
-								width: "2px",
-								// backgroundColor: 'black',
-							}}
+							style={{left: enteredWord.length * 13.75 + "px" }}
 						/>
 					)}
 				</div>
@@ -246,9 +228,9 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	const selectorHandler = (event) => {
 		setTimeLeft(event.target.value);
-		setTestDuration(event.target.value)
-		console.log(event.target.value)
-		localStorage.setItem('testDuration', event.target.value)
+		setTestDuration(event.target.value);
+		console.log(event.target.value);
+		localStorage.setItem("testDuration", event.target.value);
 		dispatch(updateTime(event.target.value));
 	};
 
@@ -273,7 +255,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					className={classes.Select}
 					// style={{ position: "absolute", top: "15px" }}
 				>
-					<option >Выберите время теста</option>
+					<option>Выберите время теста</option>
 					<option value={5}>5</option>
 					<option value={15}>15</option>
 					<option value={30}>30</option>
@@ -286,23 +268,8 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					ref={inputRef}
 					value={inputText}
 					onChange={handleInputChange}
-					style={{
-						fontSize: "25px",
-						fontFamily: "monospace",
-						padding: "5px",
-						width: "1px",
-						height: "1px",
-						position: "absolute",
-						// top: "220px",
-						// left: "20px",
-						top: "-100px",
-						left: "-100px",
-						// opacity: 0,
-						overflow: "hidden",
-						// width: "915px",
-						// whiteSpace:'pre-wrap',
-						resize: "none",
-					}}
+					className={classes.TextArea}
+					
 				/>
 			</div>
 		</>
