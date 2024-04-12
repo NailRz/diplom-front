@@ -8,7 +8,7 @@ const AppRouter = () => {
 	const authContext = useContext(AuthContext);
 	const isAuth = authContext ? authContext.isAuth : null;
 
-	const routing = useRoutes(routes());
+	const routing = useRoutes(routes(isAuth));
 
 	return <>{routing}</>;
 };

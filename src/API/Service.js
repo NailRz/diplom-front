@@ -12,5 +12,15 @@ export default class Service {
         console.log(response)
 		return response;
 	}
+	// static async authorize(email, password) {
+	// 	const response = await axios.post(
+	// 		"http://localhost:5000/auth",	
+	// 		{
+	// 			email,
+	// 			password,
+	// 		},
+	// 	);
+	// 	return response;
+	// }
 
 }

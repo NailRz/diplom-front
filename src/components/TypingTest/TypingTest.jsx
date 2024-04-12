@@ -40,9 +40,20 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const endTime = useSelector(selectEndTime);
 	const [isTestInvalid, setIsTestInvalid] = useState(false);
 	const [timeLeft, setTimeLeft] = useState(60);
+	const [testDuration, setTestDuration] = useState(60)
 	const [isTyping, setIsTyping] = useState(false);
 	const [uncorrectCharacters, setUncorrectCharacters] = useState(0);
 	const [errorArray, setErrorArray] = useState([]);
+
+	useEffect(() => {
+		if(localStorage.getItem('testDuration')){
+			// console.log(localStorage.getItem('testDuration'))
+			setTimeLeft(localStorage.getItem('testDuration'))
+			setTestDuration(localStorage.getItem('testDuration'))
+		}
+	},[])
+	
+
 	const wpm = useWpmCalculator(
 		startTime,
 		endTime,
@@ -101,9 +112,10 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 		if (timeLeft > 0 && !isTestComplete && isTestStarted) {
 			timer = setTimeout(() => {
+				console.log(timeLeft - 1);
 				setTimeLeft((prevTime) => prevTime - 1);
-				dispatch(updateEndTime(Date.now()));
 			}, 1000);
+			dispatch(updateEndTime(Date.now()));
 		}
 		if (timeLeft === 0) {
 			dispatch(updateEndTime(Date.now()));
@@ -115,13 +127,12 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [timeLeft, isTestComplete, isTestStarted, dispatch]);
+	}, [timeLeft, isTestComplete, isTestStarted]);
 
 	useEffect(() => {
 		if (timeLeft === 0) {
-			dispatch(updateEndTime(Date.now()));
-			console.log(Date.now());
-
+			// dispatch(updateEndTime(Date.now()));
+			// console.log(Date.now());
 			dispatch(updateWpm(wpm));
 			dispatch(updateIsTestComplete(true));
 		}
@@ -151,11 +162,13 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		if (userInput) {
 			const caretRect = caretRef.current.getBoundingClientRect().y.toFixed(0);
 			setCaretHeight(caretRect);
+
+			setErrorArray(addErrorToArray(userInput, words, errorArray));
+			console.log(errorArray);
 		}
 
 		dispatch(updateInputText(userInput));
 		dispatch(updateEndTime(Date.now()));
-		console.log(rowCount, "rowcount");
 
 		// testAccuracy(inputText,words)
 
@@ -168,7 +181,6 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		} else {
 			dispatch(updateIsTestComplete(false));
 		}
-		setErrorArray(addErrorToArray(inputText, words, errorArray));
 	};
 	const renderWords = () => {
 		const inputArray = inputText.split(/\s+/);
@@ -241,8 +253,10 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	const selectorHandler = (event) => {
 		setTimeLeft(event.target.value);
+		setTestDuration(event.target.value)
+		console.log(event.target.value)
+		localStorage.setItem('testDuration', event.target.value)
 		dispatch(updateTime(event.target.value));
-		console.log(event.target.value);
 	};
 
 	return (
@@ -261,15 +275,17 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					</div>
 				</div>
 				<select
-					value={timeLeft}
+					value={testDuration}
 					onChange={selectorHandler}
-					style={{ position: "absolute", top: "15px" }}
+					className={classes.Select}
+					// style={{ position: "absolute", top: "15px" }}
 				>
-					<option value="">Выберите значение</option>
+					<option >Выберите время теста</option>
 					<option value={5}>5</option>
 					<option value={15}>15</option>
 					<option value={30}>30</option>
 					<option value={60}>60</option>
+					<option value={120}>120</option>
 				</select>
 				<textarea
 					rows={1}

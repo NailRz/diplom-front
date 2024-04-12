@@ -52,7 +52,15 @@ p {
 	padding-left: 10px;
   }
 
-
+.Select{
+	position: absolute;
+	top:15px;
+	left: 45%;
+	/* color: bisque; */
+	background-color: #242424;
+	color: rgb(202, 202, 202);
+	border: #242424;
+}
 
 .Caret {
 	position: absolute;

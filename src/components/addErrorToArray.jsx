@@ -18,7 +18,7 @@ const addErrorToArray = (inputText, words, errorArray) => {
       }
     }
   }
-  console.log(errorArray)
+  // console.log(errorArray)
 
   return errorArray;
 };

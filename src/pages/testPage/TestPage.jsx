@@ -23,11 +23,12 @@ const TestPage = () => {
 	const finalWpm = useSelector(selectWpm);
 	const [wordsArr, setWordsArr] = useState(null);
 	const isTestComplete = useSelector(selectIsTestComplete);
+	
 
-	const [fetchPosts, isWordsLoading, postError] = useFetching(async () => {
+	const [fetchWords, isWordsLoading, wordsError] = useFetching(async () => {
 		const response = await Service.getAll();
 		console.log(response.data);
-		if (postError) console.log(postError);
+		if (wordsError) console.log(wordsError);
 		// const arr = [];
 		// for (let i = 0; i < response.data.length; i++) {
 		// 	arr.push(response.data[i].words);
@@ -38,7 +39,7 @@ const TestPage = () => {
 	});
 
 	useEffect(() => {
-		fetchPosts();
+		fetchWords();
 	}, []);
 
 	useEffect(() => {

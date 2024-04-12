@@ -1,4 +1,5 @@
 const ProfilePage = () => {
+    
     return (
         <div>
             <div className='details'>
