@@ -42,14 +42,10 @@ const ResultPage = () => {
 	const { accuracy, isLoading } = useAccuracyCalculator(inputText, words);
 	useEffect(() => {
 		if (!isLoading && accuracy <= 0) {
-			// setIsTestInvalid(true);
-			console.log("testInvalid");
 			dispatch(updateIsTestInvalid(true));
 		}
-	}, [accuracy, dispatch, isLoading, isTestComplete]);
+	}, [accuracy, dispatch, isLoading]);
 
-	console.log(isTestInvalid);
-    console.log(accuracy)
 	return (
 		<div>
 			{isLoading ? (
@@ -58,7 +54,7 @@ const ResultPage = () => {
 				<>
 					<h1>Your results: </h1>
 					{isTestInvalid ? (
-						<h2>Test Invalid</h2>
+						<h2>Тест не засчитан</h2>
 					) : (
 						<>
 							<h2> Time: {time}</h2>

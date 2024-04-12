@@ -16,7 +16,7 @@ export const testStates = createSlice({
             state.isTestComplete = action.payload;
         },
         updateIsTestInvalid: (state, action) => {
-            state.wpm = action.payload;
+            state.isTestInvalid = action.payload;
         },
     }
 })

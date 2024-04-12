@@ -18,7 +18,7 @@ const useAccuracyCalculator = (inputText, words) => {
 			if (enteredWord.length > correctWord.length) {
 				uncorrectCharacters+= enteredWord.length - correctWord.length;
 			}
-			for (let j = 0; j < correctWord.length; j++) {
+			for (let j = 0; i == enteredWords.length ? j < enteredWord.length : j < correctWord.length; j++) {
 				if (enteredWord[j] === correctWord[j]) {
 					correctCharacters++;
 				}
