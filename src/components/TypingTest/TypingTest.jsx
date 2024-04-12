@@ -38,11 +38,9 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const isTestComplete = useSelector(selectIsTestComplete);
 	const startTime = useSelector(selectStartTime);
 	const endTime = useSelector(selectEndTime);
-	const [isTestInvalid, setIsTestInvalid] = useState(false);
 	const [timeLeft, setTimeLeft] = useState(60);
 	const [testDuration, setTestDuration] = useState(60)
 	const [isTyping, setIsTyping] = useState(false);
-	const [uncorrectCharacters, setUncorrectCharacters] = useState(0);
 	const [errorArray, setErrorArray] = useState([]);
 
 	useEffect(() => {
@@ -52,7 +50,6 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 			setTestDuration(localStorage.getItem('testDuration'))
 		}
 	},[])
-	
 
 	const wpm = useWpmCalculator(
 		startTime,
@@ -87,10 +84,6 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	// console.log(startTime, endTime);
-	// }, [startTime, endTime]);
-
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			if (!isTyping) {
@@ -112,7 +105,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 		if (timeLeft > 0 && !isTestComplete && isTestStarted) {
 			timer = setTimeout(() => {
-				console.log(timeLeft - 1);
+				// console.log(timeLeft - 1);
 				setTimeLeft((prevTime) => prevTime - 1);
 			}, 1000);
 			dispatch(updateEndTime(Date.now()));
@@ -164,7 +157,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 			setCaretHeight(caretRect);
 
 			setErrorArray(addErrorToArray(userInput, words, errorArray));
-			console.log(errorArray);
+			// console.log(errorArray);
 		}
 
 		dispatch(updateInputText(userInput));

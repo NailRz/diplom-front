@@ -59,7 +59,7 @@ const ResultPage = () => {
 						<>
 							<h2> Time: {time}</h2>
 							<h2> Words per Minute: {formattedWpm}</h2>
-							<h2> Accuracy: {accuracy}%</h2>
+							<h2> Accuracy: {accuracy.toFixed(2)}%</h2>
 						</>
 					)}
 				</>

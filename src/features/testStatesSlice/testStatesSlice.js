@@ -1,13 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+    isTestStart: false,
+    isTestComplete: false,
+    isTyping: false,
+    isTestInvalid: false,
+};
 
 export const testStates = createSlice({
     name: 'testStates',
-    initialState:{
-        isTestStart: false,
-        isTestComplete: false,
-        isTyping:false,
-        isTestInvalid: false,
-    },
+    initialState,
     reducers: {
         updateIsTyping: (state, action) => {
             state.isTyping = action.payload;
@@ -18,12 +20,13 @@ export const testStates = createSlice({
         updateIsTestInvalid: (state, action) => {
             state.isTestInvalid = action.payload;
         },
-    }
-})
+        resetStates: () => initialState,
+    },
+});
 
 export const selectIsTyping = (state) => state.testStates.isTyping
 export const selectIsTestComplete = (state) => state.testStates.isTestComplete
 export const selectIsTestInvalid = (state) => state.testStates.isTestInvalid
 
-export const {updateIsTyping, updateIsTestComplete, updateIsTestInvalid} = testStates.actions
+export const {updateIsTyping, updateIsTestComplete, updateIsTestInvalid, resetStates} = testStates.actions
 export default testStates.reducer

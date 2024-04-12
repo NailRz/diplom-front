@@ -9,10 +9,11 @@ import {
 	selectIsTyping,
 	updateIsTyping,
 	updateIsTestComplete,
+	resetStates,
 } from "../../features/testStatesSlice/testStatesSlice";
 import store from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { selectWpm } from "../../features/testData/testDataSlice";
+import { resetData, selectWpm } from "../../features/testData/testDataSlice";
 import classes from "./TestPage.module.css";
 
 const TestPage = () => {
@@ -23,7 +24,8 @@ const TestPage = () => {
 	const finalWpm = useSelector(selectWpm);
 	const [wordsArr, setWordsArr] = useState(null);
 	const isTestComplete = useSelector(selectIsTestComplete);
-	
+	const [isRestart, setIsRestart] = useState(false);
+	const [refreshWords, setRefreshWords] = useState(false);
 
 	const [fetchWords, isWordsLoading, wordsError] = useFetching(async () => {
 		const response = await Service.getAll();
@@ -40,14 +42,20 @@ const TestPage = () => {
 
 	useEffect(() => {
 		fetchWords();
-	}, []);
+	}, [refreshWords]);
+
+	
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			if (e.code === "Tab") {
-				dispatch(updateIsTestComplete(false));
-				e.preventDefault();
-				window.location.reload();
+				setIsRestart(true)
+				dispatch(resetData()),
+				dispatch(resetStates())
+				setRefreshWords((prev) => !prev)
+				setTimeout(() => {
+					setIsRestart(false)
+				})
 			}
 		};
 
@@ -64,7 +72,7 @@ const TestPage = () => {
 			{isTestComplete ? (
 				<ResultPage time={5} wpm={finalWpm} />
 			) : (
-				<TypingTest wordsProp={wordsArr} isWordsLoading={isWordsLoading} />
+				!isRestart && <TypingTest wordsProp={wordsArr} isWordsLoading={isWordsLoading} />
 			)}
 			<div
 				style={{

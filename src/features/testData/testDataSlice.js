@@ -1,15 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const initialState = {
+    time: 0,
+    wpm: 0,
+    startTime: 0,
+    endTime: 0,
+    words: [],
+    inputText: '',
+};
+
 export const testData = createSlice({
     name: 'testData',
-    initialState:{
-        time: 0,
-        wpm:0,
-        startTime: 0,
-        endTime: 0,
-        words: [],
-        inputText: '',
-    },
+    initialState,
     reducers: {
         updateTime: (state, action) => {
             state.time = action.payload;
@@ -29,8 +31,9 @@ export const testData = createSlice({
         updateInputText: (state, action) => {
             state.inputText = action.payload;
         },
-    }
-})
+        resetData: () => initialState,
+    },
+});
 
 export const selectTime = (state) => state.testData.time
 export const selectWpm = (state) => state.testData.wpm
@@ -39,6 +42,6 @@ export const selectEndTime = (state) => state.testData.endTime
 export const selectWords = (state) => state.testData.words
 export const selectInputText = (state) => state.testData.inputText
 
-export const {updateTime, updateWpm, updateStartTime, updateEndTime, updateWords, updateInputText} = testData.actions
+export const {updateTime, updateWpm, updateStartTime, updateEndTime, updateWords, updateInputText, resetData} = testData.actions
 
 export default testData.reducer
