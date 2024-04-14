@@ -26,9 +26,14 @@
     padding: 10px;
     background-color: #242424;
     color: white;
-    border: none;
+    border: 1px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
   }
+
+  .NavbarWrapper button:hover {
+    background-color: #5f5f5f;
+  }
+  

@@ -4,7 +4,6 @@ const addErrorToArray = (inputText, words, errorArray) => {
   for (let i = 0; i < enteredWords.length && i < words.length; i++) {
     const enteredWord = enteredWords[i];
     const correctWord = words[i];
-    // const isEntWordMinThenCorrect = enteredWord < correctWord ? 1 : 0;
 
     for (let j = 0; j < enteredWord.length  ; j++) {
       if (enteredWord[j] !== correctWord[j] || enteredWord[i] == 'undefined') {
@@ -13,12 +12,11 @@ const addErrorToArray = (inputText, words, errorArray) => {
         );
 
         if (!errorExists) {
-          errorArray.push({ wordIndex: i, charIndex: j });
+          errorArray = [...errorArray, { wordIndex: i, charIndex: j }];
         }
       }
     }
   }
-  // console.log(errorArray)
 
   return errorArray;
 };

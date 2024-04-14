@@ -23,8 +23,13 @@ export const LoginPage = () => {
 
 			setIsAuth(true);
 			const token = await response.json();
-			localStorage.setItem("token", token);
+			console.log(token);
+			localStorage.setItem("token", JSON.stringify(token.token));
+			console.log(token.token);
+			console.log(localStorage.getItem("token") === JSON.stringify(token.token));
+			console.log(localStorage.getItem("token") );
 			localStorage.setItem("auth", true);
+			console.log('da')
 		} catch (error) {
 			throw new Error(error);
 		}

@@ -7,7 +7,7 @@ const useWpmCalculator = (
 	words,
 	isTestComplete
 ) => {
-	const [wpm, setWpm] = useState(0);
+	const [wpm, setWpm] = useState(0);	
 	const [timeElapsed, setTimeElapsed] = useState(0);
 	useEffect(() => {		
 		setTimeElapsed((endTime - startTime) / 1000 / 60);
