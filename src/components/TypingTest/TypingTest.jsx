@@ -192,6 +192,8 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	}, [caretHeight, prevCaretHeight, rowFlag, rowFlag2]);
 
 	const handleInputChange = (e) => {
+		console.log(errorArray);
+
 		const userInput = e.target.value;
 		setUserText(userInput);
 		if (userInput) {
@@ -200,8 +202,8 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 			setErrorArray(addErrorToArray(userInput, words, errorArray, timeLeft));
 			dispatch(updateMistakesArray(errorArray));
-			dispatch(updateInputArray(userInput.trim().split(/\s+/).length));
-			console.log(errorArray);
+			dispatch(updateInputArray(userInput.trim().split(/\s+/)));
+			// console.log(errorArray);
 		}
 
 		dispatch(updateInputText(userInput));
@@ -209,9 +211,9 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 		// testAccuracy(inputText,words)
 
-		if (userInput.trim().split(/\s+/).length > 0) {
-			dispatch(updateInputArray(userInput.trim().split(/\s+/).length));
-		}
+		// if (userInput.trim().split(/\s+/).length > 0) {
+		// 	dispatch(updateInputArray(userInput.trim().split(/\s+/).length));
+		// }
 
 		// if (userInput.length === words.length) {
 		// 	// setEndTime(Date.now());

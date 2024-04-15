@@ -13,7 +13,6 @@ const Navbar = () => {
 		<div className={classes.NavbarWrapper}>
 			<Link className={classes.TestLink} to="/">Test</Link>
 			{isAuth && <Link to="/profile">Profile</Link>}
-			{!isAuth && <Link to="/registration">Registration</Link>}
 			{!isAuth && <Link to="/login">Login</Link>}
 			{isAuth && <button onClick={logout}>Logout</button>}
 		</div>

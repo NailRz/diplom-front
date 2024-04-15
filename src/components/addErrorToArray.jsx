@@ -1,4 +1,4 @@
-const addErrorToArray = (inputText, words, errorArray) => {
+const addErrorToArray = (inputText, words, errorArray, TimeLeft) => {
   const enteredWords = inputText.trim().split(/\s+/);
 
   for (let i = 0; i < enteredWords.length && i < words.length; i++) {
@@ -12,7 +12,7 @@ const addErrorToArray = (inputText, words, errorArray) => {
         );
 
         if (!errorExists) {
-          errorArray = [...errorArray, { wordIndex: i, charIndex: j }];
+          errorArray = [...errorArray, { time: Number(TimeLeft), wordIndex: i, charIndex: j }];
         }
       }
     }

@@ -12,7 +12,6 @@
 }
 
 .AuthForm input {
-	width: 100%;
 	padding: 10px;
 	margin-bottom: 10px;
 	border: 1px solid #5f5f5f;
@@ -31,8 +30,14 @@
 	cursor: pointer;
 	font-weight: bold;
 	transition: background-color 0.3s ease;
+  /* padding-inline:10px; */
+  align-self: center;
 }
 
 .AuthForm button:hover {
 	background-color: #5f5f5f;
+}
+
+.AuthForm a {
+  margin-top: 10px;
 }

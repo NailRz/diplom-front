@@ -1,39 +1,12 @@
-import { useContext } from "react";
+import { useContext} from "react";
 import classes from "./login_registration.module.css";
 import { AuthContext } from "../../components/context";
+import { registration } from "../../API/ServiceFetch";
+
 export const RegisratonPage = () => {
 	const { isAuth, setIsAuth } = useContext(AuthContext);
 	console.log(isAuth);
-	const registration = async (email, password) => {
-		try {
-			const response = await fetch("http://localhost:5000/auth/registration", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					email,
-					password,
-				}),
-			});
-
-			if (!response.ok) {
-				throw new Error("Registration failed");
-			}
-
-			const token = await response.json();
-			console.log(token);
-			setIsAuth(true);
-			console.log(isAuth);
-			localStorage.setItem("token", token);
-			localStorage.setItem("auth", true);
-		} catch (error) {
-            alert('Такой пользователь уже существует');
-			throw new Error(error);
-		}
-	};
-
-	const onSubmit = (e) => {
+	const onSubmit = async (e) => {
 		e.preventDefault();
 		const email = e.target[0].value;
 		const password = e.target[1].value;
@@ -45,7 +18,20 @@ export const RegisratonPage = () => {
 			alert("Пароли не совпадают");
 			return;
 		}
-		registration(email, password);
+		try {
+			const response = await registration(email, password);
+			if (!response.ok) {
+				console.log(response);
+				throw new Error(response.status + " " + response.statusText + "\nПользователь уже существует");
+			}
+
+			const token = await response.json();
+			setIsAuth(true);
+			localStorage.setItem("token", JSON.stringify(token.token));
+			localStorage.setItem("auth", true);
+		} catch (error) {
+			alert(error.message);
+		}
 	};
 	return (
 		<div>

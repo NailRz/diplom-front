@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { TypingTest } from "../../components/TypingTest/TypingTest";
 import ResultPage from "./ResultPage";
-import Service from "../../API/Service";
 import { useFetching } from "../../components/hooks/useFetching";
 import {
 	selectIsTestComplete,
@@ -15,6 +14,7 @@ import store from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { resetData, selectWpm } from "../../features/testData/testDataSlice";
 import classes from "./TestPage.module.css";
+import { getWords } from "../../API/ServiceFetch";
 
 const TestPage = () => {
 	const dispatch = useDispatch();
@@ -26,38 +26,34 @@ const TestPage = () => {
 	const isTestComplete = useSelector(selectIsTestComplete);
 	const [isRestart, setIsRestart] = useState(false);
 	const [refreshWords, setRefreshWords] = useState(false);
+	const [isWordsLoading, setIsWordsLoading] = useState(true);
+	const fetchWords = async () => {
+		const response = await getWords();
 
-	const [fetchWords, isWordsLoading, wordsError] = useFetching(async () => {
-		const response = await Service.getAll();
-		console.log(response.data);
-		if (wordsError) console.log(wordsError);
-		// const arr = [];
-		// for (let i = 0; i < response.data.length; i++) {
-		// 	arr.push(response.data[i].words);
-		// }
-		// console.log(arr);
-
-		setWordsArr(response.data);
-	});
+		console.log(response);
+		setWordsArr(response);
+		setIsWordsLoading(false);
+	};
 
 	useEffect(() => {
 		fetchWords();
 	}, [refreshWords]);
 
 	const restartTest = () => {
-		setIsRestart(true)
-				dispatch(resetData()),
-				dispatch(resetStates())
-				setRefreshWords((prev) => !prev)
-				setTimeout(() => {
-					setIsRestart(false)
-				})
-	}
+		setIsRestart(true);
+		dispatch(resetData());
+		dispatch(resetStates());
+		setIsWordsLoading(true);
+		setRefreshWords((prev) => !prev);
+		setTimeout(() => {
+			setIsRestart(false);
+		});
+	};
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			if (e.code === "Tab") {
-				restartTest()
+				restartTest();
 			}
 		};
 
@@ -74,7 +70,9 @@ const TestPage = () => {
 			{isTestComplete ? (
 				<ResultPage time={5} wpm={finalWpm} />
 			) : (
-				!isRestart && <TypingTest wordsProp={wordsArr} isWordsLoading={isWordsLoading} />
+				!isRestart && (
+					<TypingTest wordsProp={wordsArr} isWordsLoading={isWordsLoading} />
+				)
 			)}
 			<div
 				style={{
@@ -86,7 +84,6 @@ const TestPage = () => {
 				Press Tab to restart test.
 			</div>
 			{/* <button onClick={restartTest}>Restart</button> */}
-
 		</div>
 	);
 };

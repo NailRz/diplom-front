@@ -1,46 +1,31 @@
 import { useContext } from "react";
 import classes from "./login_registration.module.css";
 import { AuthContext } from "../../components/context";
+import { login } from "../../API/ServiceFetch";
+
 export const LoginPage = () => {
-    const { isAuth, setIsAuth } = useContext(AuthContext);
-    console.log(isAuth);
-	const login = async (email, password) => {
-		try {
-			const response = await fetch("http://localhost:5000/auth/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					email,
-					password,
-				}),
-			});
-            if (!response.ok) {
-                console.log(response)
-				throw new Error(response.statusText);
-			}
+	const { setIsAuth } = useContext(AuthContext);
 
-			setIsAuth(true);
-			const token = await response.json();
-			console.log(token);
-			localStorage.setItem("token", JSON.stringify(token.token));
-			console.log(token.token);
-			console.log(localStorage.getItem("token") === JSON.stringify(token.token));
-			console.log(localStorage.getItem("token") );
-			localStorage.setItem("auth", true);
-			console.log('da')
-		} catch (error) {
-			throw new Error(error);
-		}
-	};
-
-	const onSubmit = (e) => {
+	const onSubmit = async (e) => {
 		e.preventDefault();
 		const email = e.target[0].value;
 		const password = e.target[1].value;
-		// console.log({ email, password });
-		login(email, password);
+
+		try {
+			const response = await login(email, password);
+			if (!response.ok) {
+				console.log(response);
+				throw new Error(response.status + " " + response.statusText + "\nНеверный логин или пароль" );
+			}
+
+			setIsAuth(true);
+
+			const token = await response.json();
+			localStorage.setItem("token", JSON.stringify(token.token));
+			localStorage.setItem("auth", true);
+		} catch (error) {
+			alert(error.message);
+		}
 	};
 	return (
 		<div>
@@ -64,6 +49,9 @@ export const LoginPage = () => {
 					required
 				/>
 				<button type="submit">Login</button>
+				<a>
+					Don&apos;t have an account? <a href="/registration">Registration</a>
+				</a>
 			</form>
 		</div>
 	);
