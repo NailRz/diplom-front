@@ -1,5 +1,6 @@
 .AuthForm {
 	display: flex;
+	padding: 150px;
 	flex-direction: column;
 	/* align-items: center; */
 	width: 300px;

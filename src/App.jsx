@@ -14,10 +14,15 @@ function App() {
 	useEffect(() => {
 		if (localStorage.getItem("auth")) {
 			setIsAuth(true);
+			setIsLoading(false)
+			console.log(localStorage.getItem("token"))
+		} else {
+			localStorage.removeItem("auth");
+			localStorage.removeItem("token");
+			setIsAuth(false);
 		}
 	}, []);
 
-	console.log(isAuth)
 
 	return (
 		<AuthContext.Provider value={{isAuth, setIsAuth, isLoading, setIsLoading}}>

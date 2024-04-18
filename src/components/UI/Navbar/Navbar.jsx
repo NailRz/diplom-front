@@ -4,10 +4,15 @@ import { useContext } from "react";
 import { AuthContext } from "../../context";
 
 const Navbar = () => {
-	const { isAuth, setIsAuth } = useContext(AuthContext);
-	const logout = () => {
-		setIsAuth(false);
+	const { isAuth, setIsAuth, isLoading } = useContext(AuthContext);
+
+	if (!isAuth && !isLoading) {
 		localStorage.removeItem("auth");
+		localStorage.removeItem("token");
+	}
+	const logout = () => {
+		localStorage.removeItem("auth");
+		setIsAuth(false);
 	};
 	return (
 		<div className={classes.NavbarWrapper}>

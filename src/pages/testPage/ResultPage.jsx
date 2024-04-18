@@ -35,27 +35,40 @@ const ResultPage = () => {
 	const wpmArray = useSelector(selectWpmArray);
 	const rawWpmArray = useSelector(selectRawWpmArray);
 	const { accuracy, isLoading } = useAccuracyCalculator(inputText, words);
-	console.log("accuracy", accuracy);
+	// console.log("accuracy", accuracy);
 	const time = localStorage.getItem("testDuration");
 	// console.log("time", time);
 
 	const formattedWpmArray = wpmArray.map((wpm) => wpm.toFixed(2));
 	const formattedRawWpmArray = rawWpmArray.map((wpm) => wpm.toFixed(2));
 
+	const trueWpm = useWpmCalculator(
+		startTime,
+		endTime,
+		inputText,
+		words,
+		isTestComplete
+	);
+
+	let formattedWpm = Number.isFinite(trueWpm)
+		? trueWpm.toFixed(2)
+		: "Calculating...";
+	// console.log(accuracy,formattedWpm)
+
 	console.log(
-		"inputArray",
-		inputArray,
+		// "inputArray",
+		// inputArray,
 		"mistakesArray",
-		mistakesArray,
-		"wpmArray",
-		wpmArray,
-		"rawWpmArray",
-		rawWpmArray
+		mistakesArray
+		// "wpmArray",
+		// wpmArray,
+		// "rawWpmArray",
+		// rawWpmArray
 	);
 	// const [isTestInvalid, setIsTestInvalid] = useState(false);
 
 	const sendResults = async (correctWordsArray, inputArray, mistakesArray) => {
-		console.log(correctWordsArray);
+		// console.log(correctWordsArray);
 		try {
 			const response = await fetch("http://localhost:5000/results", {
 				method: "POST",
@@ -67,11 +80,11 @@ const ResultPage = () => {
 				},
 				body: JSON.stringify({
 					time: time,
-					calculatedWpm:formattedWpm,
+					calculatedWpm: formattedWpm,
 					calculatedAccuracy: accuracy,
 					enteredWords: inputArray,
 					mistakes: mistakesArray,
-					accuracy: accuracy,
+					// accuracy: accuracy,
 					wpmArray: formattedWpmArray,
 					rawWpmArray: formattedRawWpmArray,
 					correctWords: correctWordsArray,
@@ -87,40 +100,41 @@ const ResultPage = () => {
 			throw new Error(error);
 		}
 	};
-	// const resultsRef = useState(null);
 
-	// useEffect(() => {
-	// 	if (!isTestInvalid && rawWpmArray.length > 0) {
-	// 		sendResults(
-	// 			correctWordsArray,
-	// 			inputArray,
-	// 			mistakesArray,
-	// 			wpmArray,
-	// 			rawWpmArray
-	// 		);
-	// 	}
-	// }, []);
+	
+	let push = false;
+	useEffect(() => {
+		if (!isTestInvalid && rawWpmArray.length > 0 && formattedWpm > 0 && !push  ) {
+			sendResults(
+				correctWordsArray,
+				inputArray,
+				mistakesArray,
+				wpmArray,
+				rawWpmArray
+			);
+			push = true;
+		}
+	}, [formattedWpm]);
 
 	const sendHandler = () => {
-		sendResults(correctWordsArray, inputArray, mistakesArray)
-	}
-	const trueWpm = useWpmCalculator(
-		startTime,
-		endTime,
-		inputText,
-		words,
-		isTestComplete
-	);
+		sendResults(correctWordsArray, inputArray, mistakesArray);
+	};
 
-	let formattedWpm = Number.isFinite(trueWpm)
-		? trueWpm.toFixed(2)
-		: "Calculating...";
+	
 
 	useEffect(() => {
 		if (!isLoading && accuracy <= 0) {
 			dispatch(updateIsTestInvalid(true));
 		}
 	}, [accuracy, dispatch, isLoading]);
+
+	// let flag = false;
+	// useEffect(() => {
+	// 	if (flag === false) {
+	// 		setNotEnteredArray(addNotEnteredWords(words, inputArray, notEnteredArray));
+	// 		flag = true;
+	// 	}
+	// }, []);
 
 	return (
 		<div>
@@ -133,7 +147,7 @@ const ResultPage = () => {
 						<h2>Вы не ввели ни одного правильного символа</h2>
 					) : (
 						<>
-							<div >
+							<div>
 								<h2> Time: {localStorage.getItem("testDuration")}</h2>
 								<h2> Words per Minute: {formattedWpm}</h2>
 								<h2> Accuracy: {accuracy}%</h2>
@@ -141,7 +155,6 @@ const ResultPage = () => {
 							</div>
 						</>
 					)}
-					
 				</>
 			)}
 		</div>

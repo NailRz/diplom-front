@@ -56,6 +56,9 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const [prevCaretHeight, setPrevCaretHeight] = useState(0);
 	const [rowCount, setRowCount] = useState(0);
 
+	const [notEnteredArray, setNotEnteredArray] = useState([]);
+	const [errorArray, setErrorArray] = useState([]);
+
 	useEffect(() => {
 		if (localStorage.getItem("testDuration")) {
 			setTimeLeft(localStorage.getItem("testDuration"));
@@ -94,7 +97,6 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	}, [wordsProp]);
 
 	const [correctWords, setCorrectWords] = useState(wordsProp);
-	const [errorArray, setErrorArray] = useState([]);
 
 	const inputArray = useSelector(selectInputArray);
 	const mistakesArray = useSelector(selectMistakesArray);
@@ -192,18 +194,17 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	}, [caretHeight, prevCaretHeight, rowFlag, rowFlag2]);
 
 	const handleInputChange = (e) => {
-		// console.log(errorArray);
-
 		const userInput = e.target.value;
 		setUserText(userInput);
 		if (userInput) {
 			const caretRect = caretRef.current.getBoundingClientRect().y.toFixed(0);
 			setCaretHeight(caretRect);
 
+			
 			setErrorArray(addErrorToArray(userInput, words, errorArray, timeLeft));
+			
 			dispatch(updateMistakesArray(errorArray));
 			dispatch(updateInputArray(userInput.trim().split(/\s+/)));
-			// console.log(errorArray);
 		}
 
 		dispatch(updateInputText(userInput));
