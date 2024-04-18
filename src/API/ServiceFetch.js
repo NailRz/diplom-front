@@ -1,18 +1,22 @@
-
-
+// const localhost = "http://localhost:5000";
+const ngrock = "https://native-piglet-typically.ngrok-free.app";
 export const getWords = async () => {
     try {
-        const response = await fetch("http://localhost:5000/words", {
+        const response = await fetch(ngrock + "/words", {
             method: "GET",
-            // headers: {
-            //     "Content-Type": "application/json",
-            // },
+            headers: {
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': 'skip-browser-warning',
+            },
         });
         if (!response.ok) {
+console.log(ngrock + "/words");
+
 			throw new Error(response.statusText);
 		}
+
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         return data;
     } catch (error) {
         throw new Error(error);
@@ -21,7 +25,7 @@ export const getWords = async () => {
 
 export const login = async (email, password) => {
     try {
-        const response = await fetch("http://localhost:5000/auth/login", {
+        const response = await fetch( ngrock + "/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +43,7 @@ export const login = async (email, password) => {
 
 export const registration = async (email, password) => {
     try {
-        const response = await fetch("http://localhost:5000/auth/registration", {
+        const response = await fetch(ngrock + "/auth/registration", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

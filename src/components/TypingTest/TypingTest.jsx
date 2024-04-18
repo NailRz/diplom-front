@@ -192,7 +192,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	}, [caretHeight, prevCaretHeight, rowFlag, rowFlag2]);
 
 	const handleInputChange = (e) => {
-		console.log(errorArray);
+		// console.log(errorArray);
 
 		const userInput = e.target.value;
 		setUserText(userInput);

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import classes from "./login_registration.module.css";
 import { AuthContext } from "../../components/context";
 import { login } from "../../API/ServiceFetch";
+import { Link } from "react-router-dom";
 
 export const LoginPage = () => {
 	const { setIsAuth } = useContext(AuthContext);
@@ -50,7 +51,7 @@ export const LoginPage = () => {
 				/>
 				<button type="submit">Login</button>
 				<a>
-					Don&apos;t have an account? <a href="/registration">Registration</a>
+					Don&apos;t have an account? <Link className={classes.TestLink} to="/registration">Registration</Link>
 				</a>
 			</form>
 		</div>

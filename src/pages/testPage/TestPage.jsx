@@ -62,7 +62,7 @@ const TestPage = () => {
 		return () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [dispatch, isTyping]);
+	}, [isTyping]);
 
 	return (
 		<div className={classes.TestPage}>

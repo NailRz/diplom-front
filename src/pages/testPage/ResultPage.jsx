@@ -34,6 +34,10 @@ const ResultPage = () => {
 	const mistakesArray = useSelector(selectMistakesArray);
 	const wpmArray = useSelector(selectWpmArray);
 	const rawWpmArray = useSelector(selectRawWpmArray);
+	const { accuracy, isLoading } = useAccuracyCalculator(inputText, words);
+	console.log("accuracy", accuracy);
+	const time = localStorage.getItem("testDuration");
+	// console.log("time", time);
 
 	const formattedWpmArray = wpmArray.map((wpm) => wpm.toFixed(2));
 	const formattedRawWpmArray = rawWpmArray.map((wpm) => wpm.toFixed(2));
@@ -62,11 +66,15 @@ const ResultPage = () => {
 						.replace(/['"]+/g, "")}`,
 				},
 				body: JSON.stringify({
-					correctWords: correctWordsArray,
+					time: time,
+					calculatedWpm:formattedWpm,
+					calculatedAccuracy: accuracy,
 					enteredWords: inputArray,
 					mistakes: mistakesArray,
-					wpm: formattedWpmArray,
-					rawWpm: formattedRawWpmArray,
+					accuracy: accuracy,
+					wpmArray: formattedWpmArray,
+					rawWpmArray: formattedRawWpmArray,
+					correctWords: correctWordsArray,
 				}),
 			});
 			if (!response.ok) {
@@ -108,7 +116,6 @@ const ResultPage = () => {
 		? trueWpm.toFixed(2)
 		: "Calculating...";
 
-	const { accuracy, isLoading } = useAccuracyCalculator(inputText, words);
 	useEffect(() => {
 		if (!isLoading && accuracy <= 0) {
 			dispatch(updateIsTestInvalid(true));
@@ -129,7 +136,7 @@ const ResultPage = () => {
 							<div >
 								<h2> Time: {localStorage.getItem("testDuration")}</h2>
 								<h2> Words per Minute: {formattedWpm}</h2>
-								<h2> Accuracy: {accuracy.toFixed(2)}%</h2>
+								<h2> Accuracy: {accuracy}%</h2>
 								<button onClick={sendHandler}> Отправить </button>
 							</div>
 						</>

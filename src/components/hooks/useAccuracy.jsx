@@ -30,7 +30,7 @@ const useAccuracyCalculator = (inputText, words) => {
 			calculatedAccuracy =
 				((correctCharacters - uncorrectCharacters) / totalCharacters) * 100;
 
-		setAccuracy(calculatedAccuracy);
+		setAccuracy(calculatedAccuracy.toFixed(2));
 		setIsLoading(false);
 		// };
 

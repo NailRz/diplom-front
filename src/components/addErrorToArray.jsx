@@ -12,7 +12,7 @@ const addErrorToArray = (inputText, words, errorArray, TimeLeft) => {
         );
 
         if (!errorExists) {
-          errorArray = [...errorArray, { time: Number(TimeLeft), wordIndex: i, charIndex: j }];
+          errorArray = [...errorArray, { time: Number(TimeLeft), wordIndex: i, charIndex: j, enteredLetter: enteredWord[j], correctLetter: correctWord[j] }];
         }
       }
     }
