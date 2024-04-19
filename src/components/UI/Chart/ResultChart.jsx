@@ -16,7 +16,7 @@ const Chart = ({ result }) => {
   });
 
   const filteredErrors = errors.map((error) => error === 0 ? null : error);
-
+  // console.log(filteredErrors);
   const data = {
     labels: Array.from({ length: result.time }, (_, i) => i + 1),
     datasets: [
@@ -56,8 +56,8 @@ const Chart = ({ result }) => {
         position: 'top',
       },
       title: {
-        display: false,
-        text: 'testChart',
+        display: true,
+        text: 'the last test passed',
       },
       tooltip: {
         callbacks: {

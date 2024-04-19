@@ -13,8 +13,11 @@ const StyledTableCell = styled(TableCell)(() => ({
 	[`&.${tableCellClasses.head}`]: {
 		backgroundColor: `var(--background-color)`,
 		color: `var(--text-color)`,
+		border: 0,
 	},
 	[`&.${tableCellClasses.body}`]: {
+		border: 0,
+
 		color: `var(--text-color)`,
 		fontSize: 14,
 	},
@@ -24,6 +27,7 @@ const StyledTableRow = styled(TableRow)(({  index }) => ({
 	backgroundColor:
 		index % 2 === 0 ? `var(--background-color)` : `var(--accent-color-2)`,
 	color: `var(--text-color)`,
+
 
 	// hide last border
 	"&:last-child td, &:last-child th": {

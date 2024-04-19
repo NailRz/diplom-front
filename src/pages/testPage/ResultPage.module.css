@@ -1,16 +1,23 @@
 .ResultPage {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 75vh;
-    margin: 0 auto;
-  }
-  
-  .Chart {
-    width: 75%;
-    max-width: 700px;
-    height: 400px;
-    margin-top: 2rem;
-  }
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 90%;
+	height: 75vh;
+	margin: 0 auto;
+}
+
+.Chart {
+	width: 77rem;
+	max-width: 700px;
+	height: 400px;
+	margin-top: 2rem;
+}
+
+.ResultText {
+  width: 20rem;
+  max-width: 300px;
+  margin-right: 2rem;
+  text-align: left;
+}

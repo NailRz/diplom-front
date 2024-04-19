@@ -105,19 +105,19 @@ const ResultPage = () => {
 		}
 	};
 
-	// let push = false;
-	// useEffect(() => {
-	// 	if (!isTestInvalid && rawWpmArray.length > 0 && formattedWpm > 0 && !push  ) {
-	// 		sendResults(
-	// 			correctWordsArray,
-	// 			inputArray,
-	// 			mistakesArray,
-	// 			wpmArray,
-	// 			rawWpmArray
-	// 		);
-	// 		push = true;
-	// 	}
-	// }, [formattedWpm]);
+	let push = false;
+	useEffect(() => {
+		if (!isTestInvalid && rawWpmArray.length > 0 && formattedWpm > 0 && !push  ) {
+			sendResults(
+				correctWordsArray,
+				inputArray,
+				mistakesArray,
+				wpmArray,
+				rawWpmArray
+			);
+			push = true;
+		}
+	}, [formattedWpm]);
 
 	const sendHandler = () => {
 		sendResults(correctWordsArray, inputArray, mistakesArray);
@@ -173,7 +173,7 @@ const ResultPage = () => {
 						<h2>Вы не ввели ни одного правильного символа</h2>
 					) : (
 						<div>
-							<div>
+							<div className={classes.ResultText}>
 								<h1>Your results: </h1>
 								<h2> Time: {localStorage.getItem("testDuration")}</h2>
 								<h2> Words per Minute: {formattedWpm}</h2>

@@ -23,14 +23,14 @@ const ProfilePage = () => {
 	};
 
 	const [results, setResults] = useState([]);
-	const result = results[5]; 
+	const result = results[0]; 
 	console.log(result);
 	useEffect(() => {
 		getLastTResults();
 	}, []);
 
 	return (
-		<div>
+		<div className={classes.ProfilePageWrapper}>
 			<div className={classes.Details}>
 				<div className={classes.ProfileName}>profileName</div>
 				<div className={classes.TestStarted}>testStarted</div>
