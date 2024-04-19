@@ -19,6 +19,8 @@ import {
 import useAccuracyCalculator from "../../components/hooks/useAccuracy";
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from "react";
+import classes from "./ResultPage.module.css";
+import Chart from "../../components/UI/Chart/ResultChart";
 
 const ResultPage = () => {
 	const dispatch = useDispatch();
@@ -55,18 +57,17 @@ const ResultPage = () => {
 		: "Calculating...";
 	// console.log(accuracy,formattedWpm)
 
-	console.log(
-		// "inputArray",
-		// inputArray,
-		"mistakesArray",
-		mistakesArray
-		// "wpmArray",
-		// wpmArray,
-		// "rawWpmArray",
-		// rawWpmArray
-	);
+	// console.log(
+	// "inputArray",
+	// inputArray,
+	// "mistakesArray",
+	// mistakesArray
+	// "wpmArray",
+	// wpmArray,
+	// "rawWpmArray",
+	// rawWpmArray
+	// );
 	// const [isTestInvalid, setIsTestInvalid] = useState(false);
-
 	const sendResults = async (correctWordsArray, inputArray, mistakesArray) => {
 		// console.log(correctWordsArray);
 		try {
@@ -104,26 +105,23 @@ const ResultPage = () => {
 		}
 	};
 
-	
-	let push = false;
-	useEffect(() => {
-		if (!isTestInvalid && rawWpmArray.length > 0 && formattedWpm > 0 && !push  ) {
-			sendResults(
-				correctWordsArray,
-				inputArray,
-				mistakesArray,
-				wpmArray,
-				rawWpmArray
-			);
-			push = true;
-		}
-	}, [formattedWpm]);
+	// let push = false;
+	// useEffect(() => {
+	// 	if (!isTestInvalid && rawWpmArray.length > 0 && formattedWpm > 0 && !push  ) {
+	// 		sendResults(
+	// 			correctWordsArray,
+	// 			inputArray,
+	// 			mistakesArray,
+	// 			wpmArray,
+	// 			rawWpmArray
+	// 		);
+	// 		push = true;
+	// 	}
+	// }, [formattedWpm]);
 
 	const sendHandler = () => {
 		sendResults(correctWordsArray, inputArray, mistakesArray);
 	};
-
-	
 
 	useEffect(() => {
 		if (!isLoading && accuracy <= 0) {
@@ -138,27 +136,56 @@ const ResultPage = () => {
 	// 		flag = true;
 	// 	}
 	// }, []);
+	const [result, setResult] = useState([]);
+	const [isReady, setIsReady] = useState(false);
+	
+	useEffect(() => {
+		if (
+			(time && formattedWpmArray?.length > 0,
+			formattedRawWpmArray?.length > 0,
+			mistakesArray?.length > 0)
+		) {
+			setIsReady(true);
+			// console.log(mistakesArray);
+			setResult((prevResult) => [
+				...prevResult,
+				{
+					time: Number(time),
+					wpmArray: formattedWpmArray,
+					rawWpmArray: formattedRawWpmArray,
+					mistakes: mistakesArray,
+				},
+			]);
+		}
+	}, []);
+
+	// useEffect(() => {
+	// 	if (isReady) console.log(result);
+	// }, [isReady]);
 
 	return (
 		<div>
 			{isLoading ? (
 				<p>Loading...</p>
 			) : (
-				<>
-					<h1>Your results: </h1>
+				<div className={classes.ResultPage}>
 					{isTestInvalid ? (
 						<h2>Вы не ввели ни одного правильного символа</h2>
 					) : (
-						<>
+						<div>
 							<div>
+								<h1>Your results: </h1>
 								<h2> Time: {localStorage.getItem("testDuration")}</h2>
 								<h2> Words per Minute: {formattedWpm}</h2>
 								<h2> Accuracy: {accuracy}%</h2>
 								<button onClick={sendHandler}> Отправить </button>
 							</div>
-						</>
+						</div>
 					)}
-				</>
+					<div className={classes.Chart}>
+						{isReady && <Chart result={result[0]} />}
+					</div>
+				</div>
 			)}
 		</div>
 	);

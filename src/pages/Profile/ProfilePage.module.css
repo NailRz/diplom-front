@@ -19,6 +19,9 @@
 .Seconds{
 
 }
-.Graphics{
-
+.Charts{
+    width: 500px;
+    align-self: center;
+    height: 300px;
 }
+
