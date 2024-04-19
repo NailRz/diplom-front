@@ -70,6 +70,9 @@ const ResultPage = () => {
 	const sendResults = async (correctWordsArray, inputArray, mistakesArray) => {
 		// console.log(correctWordsArray);
 		try {
+			if (!localStorage.getItem("token")) {
+				throw new Error("Unauthorized");
+			}
 			const response = await fetch("http://localhost:5000/results", {
 				method: "POST",
 				headers: {

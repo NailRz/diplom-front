@@ -60,3 +60,19 @@ export const registration = async (email, password) => {
     }
 };
 
+export const getLastTenResults = async () => {
+    try {
+        const response = await fetch(ngrock + "/results/LastTen", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': 'skip-browser-warning',
+                'Authorization': `Bearer ${localStorage.getItem("token").replace(/['"]+/g, "")}`,
+            },
+        });
+        // console.log(response.json());
+        return response;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
