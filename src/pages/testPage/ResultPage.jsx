@@ -20,7 +20,7 @@ import useAccuracyCalculator from "../../components/hooks/useAccuracy";
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from "react";
 import classes from "./ResultPage.module.css";
-import Chart from "../../components/UI/Chart/ResultChart";
+import ResultChart from "../../components/UI/Chart/ResultChart";
 
 const ResultPage = () => {
 	const dispatch = useDispatch();
@@ -183,7 +183,7 @@ const ResultPage = () => {
 						</div>
 					)}
 					<div className={classes.Chart}>
-						{isReady && <Chart result={result[0]} />}
+						{isReady && <ResultChart result={result[0]} />}
 					</div>
 				</div>
 			)}

@@ -31,6 +31,7 @@
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    font-family: monospace;
   }
 
   .NavbarWrapper button:hover {

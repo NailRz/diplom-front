@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import classes from "./Navbar.module.css";
 import { useContext } from "react";
 import { AuthContext } from "../../context";
-
+import { FiLogOut } from "react-icons/fi";
+import { GoPerson, GoX } from "react-icons/go";
 const Navbar = () => {
 	const { isAuth, setIsAuth, isLoading } = useContext(AuthContext);
 
@@ -16,11 +17,23 @@ const Navbar = () => {
 	};
 	return (
 		<div className={classes.NavbarWrapper}>
-			<Link className={classes.TestLink} to="/">Test</Link>
-			{isAuth && <Link to="/profile">Profile</Link>}
-			{!isAuth && <Link to="/login">Login</Link>}
-			{isAuth && <button onClick={logout}>Logout</button>}
-		</div>
+      <Link className={classes.TestLink} to="/">
+        <GoX style={{ position: "relative", top: "4px" }} size={17} /> Test
+      </Link>
+      <div className={classes.NavbarButtons}>
+        {isAuth && (
+          <>
+            <Link to="/profile" className={classes.ProfileButton}>
+              <GoPerson size={13} style={{ position: "relative", top: "2px" }} /> Profile
+            </Link>
+            <button onClick={logout}>
+              Logout <FiLogOut style={{ position: "relative", top: "2px" }} size={13} />
+            </button>
+          </>
+        )}
+        {!isAuth && <Link to="/login">Login</Link>}
+      </div>
+    </div>
 	);
 };
 

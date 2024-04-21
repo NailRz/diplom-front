@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TypingTest } from "../../components/TypingTest/TypingTest";
 import ResultPage from "./ResultPage";
 import { useFetching } from "../../components/hooks/useFetching";
@@ -15,8 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetData, selectWpm } from "../../features/testData/testDataSlice";
 import classes from "./TestPage.module.css";
 import { getWords } from "../../API/ServiceFetch";
+import { AuthContext } from "../../components/context";
 
 const TestPage = () => {
+	const {isAuth} = useContext(AuthContext);
 	const dispatch = useDispatch();
 	const isTyping = useSelector(selectIsTyping);
 	// const finalTime = useSelector(changeTime)
@@ -28,7 +30,8 @@ const TestPage = () => {
 	const [refreshWords, setRefreshWords] = useState(false);
 	const [isWordsLoading, setIsWordsLoading] = useState(true);
 	const fetchWords = async () => {
-		const response = await getWords();
+		console.log(isAuth);
+		const response = await getWords(isAuth);
 
 		console.log(response);
 		setWordsArr(response);

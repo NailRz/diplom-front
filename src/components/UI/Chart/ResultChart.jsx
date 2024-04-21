@@ -4,14 +4,14 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const Chart = ({ result }) => {
+const ResultChart = ({ result }) => {
     if (!result) {
         return null;
       }
   const errors = Array(result.time).fill(0);
 
   result.mistakes.forEach((mistake) => {
-    errors[mistake.time]++;
+    errors[mistake.time - 1]++;
     
   });
 
@@ -56,7 +56,7 @@ const Chart = ({ result }) => {
         position: 'top',
       },
       title: {
-        display: true,
+        display: false,
         text: 'the last test passed',
       },
       tooltip: {
@@ -74,4 +74,4 @@ const Chart = ({ result }) => {
   return <Line data={data} options={options} />;
 };
 
-export default Chart;
+export default ResultChart;

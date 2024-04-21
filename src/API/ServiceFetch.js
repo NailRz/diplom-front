@@ -1,16 +1,25 @@
 // const localhost = "http://localhost:5000";
 const ngrock = "https://native-piglet-typically.ngrok-free.app";
-export const getWords = async () => {
+export const getWords = async (isAuth) => {
     try {
-        const response = await fetch(ngrock + "/words", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                'ngrok-skip-browser-warning': 'skip-browser-warning',
-            },
+        // console.log(isAuth);
+        const headers = {
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+        };
+        if (isAuth) {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            throw new Error("Token not found");
+          }
+          headers.Authorization = `Bearer ${token.replace(/['"]+/g, "")}`;
+        }
+        const response = await fetch(ngrock + "/words" + (isAuth ? "/by-ngrams" : ''), {
+          method: "GET",
+          headers,
         });
         if (!response.ok) {
-console.log(ngrock + "/words");
+// console.log(response);
 
 			throw new Error(response.statusText);
 		}

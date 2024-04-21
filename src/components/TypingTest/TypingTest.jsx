@@ -125,11 +125,9 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
-			if (!isTyping) {
+			if (!isTyping && e.code != 'AltLeft') {
 				startTest();
 				setIsTyping(true);
-				// fillArray();
-				// console.log("handleKeyDown");
 			}
 		};
 

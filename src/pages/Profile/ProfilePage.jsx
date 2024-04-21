@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getLastTenResults } from "../../API/ServiceFetch";
 import classes from "./ProfilePage.module.css";
 import ResultTable from "../../components/UI/ResultTable/ResultTable";
-import Chart from "../../components/UI/Chart/ResultChart";
+import ResultChart from "../../components/UI/Chart/ResultChart";
 
 const ProfilePage = () => {
 	const getLastTResults = async () => {
@@ -24,7 +24,7 @@ const ProfilePage = () => {
 
 	const [results, setResults] = useState([]);
 	const result = results[0]; 
-	console.log(result);
+	// console.log(result);
 	useEffect(() => {
 		getLastTResults();
 	}, []);
@@ -44,7 +44,7 @@ const ProfilePage = () => {
 				<div className={classes.Seconds}>120sec</div>
 			</div>
 			<div className={classes.Charts}>
-				<Chart result={result} />
+				<ResultChart result={result} />
 			</div>
 			<div className={classes.ResultsTable}>
 				<ResultTable results={results} />

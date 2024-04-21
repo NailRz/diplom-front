@@ -15,7 +15,7 @@ function App() {
 		if (localStorage.getItem("auth")) {
 			setIsAuth(true);
 			setIsLoading(false)
-			// console.log(localStorage.getItem("token"))
+			console.log(localStorage.getItem("token"))
 		} else {
 			localStorage.removeItem("auth");
 			localStorage.removeItem("token");

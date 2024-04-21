@@ -8,6 +8,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import classes from "./ResultTable.module.css";
+import ChartModal from "../Chart/ChartModal/ChartModal";
+import ResultChart from "../Chart/ResultChart";
+import { BiSort } from "react-icons/bi";
+
+// import ChartModal from "../Chart/ChartModal/ChartModal";
 
 const StyledTableCell = styled(TableCell)(() => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -23,11 +28,10 @@ const StyledTableCell = styled(TableCell)(() => ({
 	},
 }));
 
-const StyledTableRow = styled(TableRow)(({  index }) => ({
+const StyledTableRow = styled(TableRow)(({ index }) => ({
 	backgroundColor:
 		index % 2 === 0 ? `var(--background-color)` : `var(--accent-color-2)`,
 	color: `var(--text-color)`,
-
 
 	// hide last border
 	"&:last-child td, &:last-child th": {
@@ -41,7 +45,7 @@ function createData(data) {
 		calculatedWpm: data.calculatedWpm,
 		calculatedAccuracy: data.calculatedAccuracy,
 		enteredWordsLength: data.enteredWords.length,
-		info: `${data.mistakes.length} mistakes`,
+		mistakes: `${data.mistakes.length}`,
 		date: new Date(data.createdAt).toLocaleString(),
 	};
 }
@@ -60,23 +64,46 @@ export default function ResultTable({ results }) {
 		setOrderBy(property);
 	};
 
+	const [modal, setModal] = React.useState(false);
+	const [chartResult, setChartResult] = React.useState(null);
+	const getChartResult = (row) => {
+		const chartResult = inputData.filter(
+			(result) => new Date(result.createdAt).toLocaleString() === row.date
+		)[0];
+		return chartResult;
+	};
+
+	const handleOpenChartModal = (row) => {
+		const result = getChartResult(row);
+		setChartResult(result);
+		setModal(true);
+	};
+
+	// const handleOpenChartModal  = (chartResult) => {
+	// 	return (
+
+	// 	);
+	// };
+
 	return (
-		<TableContainer component={Paper} style={{backgroundColor: `var(--background-color)`}} className={classes.ResultTable}>
+		<TableContainer
+			component={Paper}
+			style={{ backgroundColor: `var(--background-color)` }}
+			className={classes.ResultTable}
+		>
 			<Table aria-label="customized table">
 				<TableHead className={classes.TableHead}>
-					<TableRow>
+					<TableRow style={{ cursor: "pointer" }}>
 						<StyledTableCell
 							onClick={(event) => handleRequestSort(event, "time")}
 						>
-							{" "}
-							Time{" "}
+							Time <BiSort />
 						</StyledTableCell>
 						<StyledTableCell
 							align="right"
 							onClick={(event) => handleRequestSort(event, "calculatedWpm")}
 						>
-							{" "}
-							WPM{" "}
+							WPM <BiSort />
 						</StyledTableCell>
 						<StyledTableCell
 							align="right"
@@ -84,7 +111,7 @@ export default function ResultTable({ results }) {
 								handleRequestSort(event, "calculatedAccuracy")
 							}
 						>
-							Accuracy{" "}
+							Accuracy <BiSort />
 						</StyledTableCell>
 						<StyledTableCell
 							align="right"
@@ -92,19 +119,25 @@ export default function ResultTable({ results }) {
 								handleRequestSort(event, "enteredWordsLength")
 							}
 						>
-							Words entered{" "}
+							Words entered <BiSort />
 						</StyledTableCell>
 						<StyledTableCell
 							align="right"
+							onClick={(event) => handleRequestSort(event, "mistakes")}
+						>
+							Mistakes <BiSort />
+						</StyledTableCell>
+						<StyledTableCell
+							align="center"
 							onClick={(event) => handleRequestSort(event, "info")}
 						>
-							Info{" "}
+							Info <BiSort />
 						</StyledTableCell>
 						<StyledTableCell
 							align="right"
 							onClick={(event) => handleRequestSort(event, "date")}
 						>
-							Date{" "}
+							Date 
 						</StyledTableCell>
 					</TableRow>
 				</TableHead>
@@ -117,7 +150,7 @@ export default function ResultTable({ results }) {
 									: a[orderBy] - b[orderBy]) * (order === "asc" ? 1 : -1)
 						)
 						.map((row, index) => (
-							<StyledTableRow  key={row.date} index={index}>
+							<StyledTableRow key={row.date} index={index}>
 								<StyledTableCell component="th" scope="row">
 									{row.time}
 								</StyledTableCell>
@@ -130,7 +163,20 @@ export default function ResultTable({ results }) {
 								<StyledTableCell align="right">
 									{row.enteredWordsLength}
 								</StyledTableCell>
-								<StyledTableCell align="right">{row.info}</StyledTableCell>
+								<StyledTableCell align="right">
+									{row.mistakes} mistakes
+								</StyledTableCell>
+								<StyledTableCell align="right">
+									{row.info}
+									<button onClick={() => handleOpenChartModal(row)}>
+										Open Chart
+									</button>
+									{modal && (
+										<ChartModal visible={modal} setVisible={setModal}>
+											<ResultChart result={chartResult} />
+										</ChartModal>
+									)}
+								</StyledTableCell>
 								<StyledTableCell align="right">{row.date}</StyledTableCell>
 							</StyledTableRow>
 						))}
