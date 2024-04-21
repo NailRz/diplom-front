@@ -158,7 +158,7 @@ export default function ResultTable({ results }) {
 									{row.calculatedWpm}
 								</StyledTableCell>
 								<StyledTableCell align="right">
-									{row.calculatedAccuracy}
+									{row.calculatedAccuracy}%
 								</StyledTableCell>
 								<StyledTableCell align="right">
 									{row.enteredWordsLength}

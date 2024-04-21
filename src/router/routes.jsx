@@ -12,7 +12,7 @@ const routes = (isAuth) => [
 	},
 	{
 		path: "/profile",
-		element: <ProfilePage />,
+		element: isAuth ?  <ProfilePage /> : <Navigate to="/" />,
 		exact: true,
 	},
 	{

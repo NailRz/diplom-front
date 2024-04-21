@@ -8,19 +8,31 @@
   }
   
   .Details {
+    margin: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content:space-between;
+    width: 100%;
+    background-color: var(--accent-color-2)
+  }
+
+  .ProfileImage{
+    width: 80px;
+    margin: 16px;
   }
   
   .Results {
     display: flex;
     justify-content: center;
+    background-color: var(--background-color);
+    margin: 10px;
+    height: 100%;
   }
   
   .Seconds {
-    margin: 0 10px;
+    margin: 10px;
+    height: 80%;
   }
   
   .Charts {

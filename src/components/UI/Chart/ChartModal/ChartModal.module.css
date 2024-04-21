@@ -16,8 +16,8 @@
     background:var(--background-color);
     border-radius: 16px;
     min-width: 250px;
-    width: 80%; /* добавляем ширину в 80% от ширины экрана */
-    height: 60%; /* добавляем высоту в 80% от высоты экрана */
+    width: 60%; 
+    height: 60%; 
 }
 
 .MyModal.active {

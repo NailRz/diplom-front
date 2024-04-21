@@ -23,7 +23,7 @@ const ProfilePage = () => {
 	};
 
 	const [results, setResults] = useState([]);
-	const result = results[0]; 
+	const result = results[0];
 	// console.log(result);
 	useEffect(() => {
 		getLastTResults();
@@ -32,17 +32,22 @@ const ProfilePage = () => {
 	return (
 		<div className={classes.ProfilePageWrapper}>
 			<div className={classes.Details}>
-				<div className={classes.ProfileName}>profileName</div>
-				<div className={classes.TestStarted}>testStarted</div>
-				<div className={classes.TestCompleted}>testCompleted</div>
-				<div className={classes.TypingTime}>typingTime</div>
+				<div>
+					<img
+						className={classes.ProfileImage}
+						src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+					/>
+					<div className={classes.ProfileName}>profileName</div>
+					<div className={classes.Joined}>Joined from 2024</div>
+				</div>
+				<div className={classes.Results}>
+					<div className={classes.Seconds}>15sec</div>
+					<div className={classes.Seconds}>30sec</div>
+					<div className={classes.Seconds}>60sec</div>
+					<div className={classes.Seconds}>120sec</div>
+				</div>
 			</div>
-			<div className={classes.Results}>
-				<div className={classes.Seconds}>15sec</div>
-				<div className={classes.Seconds}>30sec</div>
-				<div className={classes.Seconds}>60sec</div>
-				<div className={classes.Seconds}>120sec</div>
-			</div>
+
 			<div className={classes.Charts}>
 				<ResultChart result={result} />
 			</div>
