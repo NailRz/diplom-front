@@ -1,0 +1,28 @@
+@import url("../../../../_colors.module.css");
+.MyModal {
+    position: fixed;
+    top:0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: none;
+    background: var(--accent-color-2)
+    
+    
+}
+
+.MyModalContent {
+    padding: 25px;
+    background:var(--background-color);
+    border-radius: 16px;
+    min-width: 250px;
+    width: 60%; 
+    height: 60%; 
+}
+
+.MyModal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

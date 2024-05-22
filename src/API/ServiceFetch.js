@@ -68,6 +68,22 @@ export const registration = async (email, password) => {
         throw new Error(error);
     }
 };
+export const getUserInfo = async () => {
+    try {
+        const response = await fetch(ngrock + "/users/me", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': 'skip-browser-warning',
+                'Authorization': `Bearer ${localStorage.getItem("token").replace(/['"]+/g, "")}`,
+            },
+        });
+        // console.log(response.json());
+        return response;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 
 export const getLastTenResults = async () => {
     try {
@@ -84,4 +100,39 @@ export const getLastTenResults = async () => {
     } catch (error) {
         throw new Error(error);
     }
+
+ 
+}
+
+export const getTopWpm = async () => {
+    try {
+        const response = await fetch(ngrock + "/results/bestWpm", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': 'skip-browser-warning',
+                'Authorization': `Bearer ${localStorage.getItem("token").replace(/['"]+/g, "")}`,
+            },
+        });
+        // console.log(response.json());
+        return response;
+    } catch (error) {
+        throw new Error(error);
+    } 
+}
+export const getAllResults = async () => {
+    try {
+        const response = await fetch(ngrock + "/results/all", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': 'skip-browser-warning',
+                'Authorization': `Bearer ${localStorage.getItem("token").replace(/['"]+/g, "")}`,
+            },
+        });
+        // console.log(response.json());
+        return response;
+    } catch (error) {
+        throw new Error(error);
+    } 
 }

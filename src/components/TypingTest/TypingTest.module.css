@@ -1,26 +1,15 @@
 .TestWords {
-	/* display: flex; */
 	position: absolute;
 	width: 122vh;
 	top: 35%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	/* overflow:visible */
-	/* height: 50px; */
-	/* background-color:antiquewhite	 */
 }
 
 .WordsWrapper{
-
-	/* display: flex; */
-	/* height: 144px; */
-	/* background-color:antiquewhite; */
 	position: absolute;
-	/* margin-bottom:60px; */
-	/* width: 100px; */
 	height: 110px;	
 	overflow:hidden; 
-	
 }
 
 .Word {
@@ -28,22 +17,14 @@
 	margin-inline: 0.25em;
 	display: inline-block;
 	margin-top: 10px;
-	/* font-size: x-large; */
 	font-size: 25px;
 	line-height: 24px;
-	/* font-family: Arial; */
 	font-family: monospace;
 	position: absolute;
-	/* transform: translateY(-40px); */
-	/* transform: none; */
-	/* background-color:red; */
 }
 
 .WpmWrapper{
-	/* display: flex; */
-	/* padding: 10px */
 	position: relative,
-	/* : 1px */
 }
 p {
 	display: block;
