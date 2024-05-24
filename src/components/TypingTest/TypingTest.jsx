@@ -129,7 +129,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
-			if (!isTyping && e.code != 'AltLeft') {
+			if (!isTyping && e.code != "AltLeft") {
 				startTest();
 				setIsTyping(true);
 			}
@@ -196,43 +196,44 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	}, [caretHeight, prevCaretHeight, rowFlag, rowFlag2]);
 	const [currentCharIndex, setCurrentCharIndex] = useState(0);
 
-	useEffect(() => {
-		if (currentCharIndex) {
-			console.log(currentCharIndex);
-		}
-	},[currentCharIndex])
+	// useEffect(() => {
+	// 	if (currentCharIndex) {
+	// 		// console.log(currentCharIndex);
+	// 	}
+	// },[currentCharIndex])
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
 		const cleanedInput = userInput.replace(/\s+/g, " ");
-		const inputAr = userInput.split(" ");	
-		console.log(inputAr)
-		console.log(cleanedInput)
+		const inputAr = userInput.split(" ");
+		// console.log(inputAr)
+		// console.log(cleanedInput)
 
-		let err = 0
+		let err = 0;
 		for (let i = 0; i < inputAr.length; i++) {
 			if (inputAr[i].length > wordsProp[i].length) {
-				err+= inputAr[i].length - wordsProp[i].length;}
-				if (i >= 1 && inputAr[i-1].length < wordsProp[i-1].length ) {
-					err-=  wordsProp[i-1].length - inputAr[i-1].length;
+				err += inputAr[i].length - wordsProp[i].length;
+			}
+			if (i >= 1 && inputAr[i - 1].length < wordsProp[i - 1].length) {
+				err -= wordsProp[i - 1].length - inputAr[i - 1].length;
 			}
 		}
-		console.log(err);
+		// console.log(err);
 		setUserText(userInput);
 		if (userInput) {
 			const caretRect = caretRef.current.getBoundingClientRect().y.toFixed(0);
 			setCaretHeight(caretRect);
 
-			
 			setErrorArray(addErrorToArray(userInput, words, errorArray, timeLeft));
-			
+
 			dispatch(updateMistakesArray(errorArray));
 			dispatch(updateInputArray(userInput.trim().split(/\s+/)));
-			setCurrentCharIndex(userInput.length); 
-			if (userInput.length){highlightKey = wordsString[cleanedInput.length - err].toUpperCase();}
+			setCurrentCharIndex(userInput.length);
+			if (userInput.length) {
+				highlightKey = wordsString[cleanedInput.length - err].toUpperCase();
+			}
 			setHighlight(highlightKey);
-			console.log(highlightKey);
+			// console.log(highlightKey);
 		}
-	
 
 		dispatch(updateInputText(userInput));
 		dispatch(updateEndTime(Date.now()));
@@ -342,8 +343,10 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					onChange={handleInputChange}
 					className={classes.TextArea}
 				/>
-			<div className={classes.Keyboard}><Keyboard highlightKey={highlight}></Keyboard></div>
-
+				<div className={classes.Keyboard}>
+					<Keyboard highlightKey={highlight}></Keyboard>
+						<img className={classes.img} src="/hands4.png" />
+				</div>
 			</div>
 		</>
 	);

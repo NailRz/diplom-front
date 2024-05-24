@@ -11,15 +11,15 @@ const Keyboard = ({ highlightKey }) => {
   ];
 
   const fingerColors = {
-    leftPinky: "#8FBC8F", // greenish color
-    leftRing: "#FFB6C1", // light pink
-    leftMiddle: "#DDA0DD", // light purple
-    leftIndex: "#DA70D6", // orchid color
-    rightIndex: "#98FB98", // pale green
-    rightMiddle: "#DDA0DD", // light purple
-    rightRing: "#FFB6C1", // light pink
-    rightPinky: "#8FBC8F", // greenish color
-    thumb: "#FFD700" // yellow
+    leftPinky: "#85e950", // greenish color
+    leftRing: "#a3f8ab", // light pink
+    leftMiddle: "#ffaff7", // light purple
+    leftIndex: "#c2a5ff", // orchid color
+    rightIndex: "#d9ccff", // pale green
+    rightMiddle: "#ffaff7", // light purple
+    rightRing: "#a3f8ab", // light pink
+    rightPinky: "#85e950", // greenish color
+    thumb: "#fef289" // yellow
   };
 
   const fingerMapping = {
