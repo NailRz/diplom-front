@@ -16,6 +16,7 @@ import { resetData, selectWpm } from "../../features/testData/testDataSlice";
 import classes from "./TestPage.module.css";
 import { getWords } from "../../API/ServiceFetch";
 import { AuthContext } from "../../components/context";
+import Keyboard from "../../components/UI/Keyboard/Keyboard";
 
 const TestPage = () => {
 	const {isAuth} = useContext(AuthContext);
@@ -66,7 +67,7 @@ const TestPage = () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [isTyping]);
-
+		
 	return (
 		<div className={classes.TestPage}>
 			{/* <button onClick={() => navigate(`/results`)}></button> */}
@@ -87,6 +88,7 @@ const TestPage = () => {
 				Press Tab to restart test.
 			</div>
 			{/* <button onClick={restartTest}>Restart</button> */}
+			
 		</div>
 	);
 };

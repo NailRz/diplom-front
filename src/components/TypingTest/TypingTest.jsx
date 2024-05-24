@@ -31,6 +31,7 @@ import {
 } from "../../features/testStatesSlice/testStatesSlice.js";
 import addErrorToArray from "../addErrorToArray.jsx";
 import CalculateRawWpm from "../CalculateRawWpm.jsx";
+import Keyboard from "../UI/Keyboard/Keyboard.jsx";
 
 export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	const dispatch = useDispatch();
@@ -58,6 +59,9 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 
 	const [notEnteredArray, setNotEnteredArray] = useState([]);
 	const [errorArray, setErrorArray] = useState([]);
+	let highlightKey;
+	const [highlight, setHighlight] = useState(0);
+	const wordsString = words.join(" ");
 
 	useEffect(() => {
 		if (localStorage.getItem("testDuration")) {
@@ -190,9 +194,29 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 		}
 		setPrevCaretHeight(caretHeight);
 	}, [caretHeight, prevCaretHeight, rowFlag, rowFlag2]);
+	const [currentCharIndex, setCurrentCharIndex] = useState(0);
 
+	useEffect(() => {
+		if (currentCharIndex) {
+			console.log(currentCharIndex);
+		}
+	},[currentCharIndex])
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
+		const cleanedInput = userInput.replace(/\s+/g, " ");
+		const inputAr = userInput.split(" ");	
+		console.log(inputAr)
+		console.log(cleanedInput)
+
+		let err = 0
+		for (let i = 0; i < inputAr.length; i++) {
+			if (inputAr[i].length > wordsProp[i].length) {
+				err+= inputAr[i].length - wordsProp[i].length;}
+				if (i >= 1 && inputAr[i-1].length < wordsProp[i-1].length ) {
+					err-=  wordsProp[i-1].length - inputAr[i-1].length;
+			}
+		}
+		console.log(err);
 		setUserText(userInput);
 		if (userInput) {
 			const caretRect = caretRef.current.getBoundingClientRect().y.toFixed(0);
@@ -203,7 +227,12 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 			
 			dispatch(updateMistakesArray(errorArray));
 			dispatch(updateInputArray(userInput.trim().split(/\s+/)));
+			setCurrentCharIndex(userInput.length); 
+			if (userInput.length){highlightKey = wordsString[cleanedInput.length - err].toUpperCase();}
+			setHighlight(highlightKey);
+			console.log(highlightKey);
 		}
+	
 
 		dispatch(updateInputText(userInput));
 		dispatch(updateEndTime(Date.now()));
@@ -313,6 +342,8 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 					onChange={handleInputChange}
 					className={classes.TextArea}
 				/>
+			<div className={classes.Keyboard}><Keyboard highlightKey={highlight}></Keyboard></div>
+
 			</div>
 		</>
 	);

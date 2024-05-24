@@ -35,7 +35,7 @@ const ProfilePage = () => {
 				throw new Error(errorData.message || "Ошибка при получении данных");
 			}
 			const data = await response.json();
-			console.log(data.createdAt)
+			console.log(data)
 			setUserInfo(data);
 			return data;
 		} catch (error) {
@@ -66,6 +66,7 @@ const ProfilePage = () => {
 			const response = await getAllResults();
 			if (!response.ok) {
 				const errorData = await response.json();
+				alert(errorData.message);
 				throw new Error(errorData.message || "Ошибка при получении данных");
 			}
 			const data = await response.json();

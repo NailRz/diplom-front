@@ -1,0 +1,38 @@
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.keyboardRow {
+  display: flex;
+}
+
+.keyboardKey {
+  box-sizing: border-box; /* Add this line */
+  min-width: 40px;
+  height: 40px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 5px;
+  font-size: 18px;
+  color:#000;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
+.keyboardKey.wide {
+  min-width: 80px;
+}
+
+.keyboardKey.extraWide {
+  min-width: 120px;
+}
+
+.highlight {
+  border: 4px solid white;
+}
