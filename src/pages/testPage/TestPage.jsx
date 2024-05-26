@@ -81,7 +81,7 @@ const TestPage = () => {
 			<div
 				style={{
 					textAlign: "center",
-					bottom: "80px",
+					top: "75px",
 					position: "absolute",
 				}}
 			>

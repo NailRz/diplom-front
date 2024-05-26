@@ -37,9 +37,7 @@ const ResultPage = () => {
 	const wpmArray = useSelector(selectWpmArray);
 	const rawWpmArray = useSelector(selectRawWpmArray);
 	const { accuracy, isLoading } = useAccuracyCalculator(inputText, words);
-	// console.log("accuracy", accuracy);
 	const time = localStorage.getItem("testDuration");
-	// console.log("time", time);
 
 	const formattedWpmArray = wpmArray.map((wpm) => wpm.toFixed(2));
 	const formattedRawWpmArray = rawWpmArray.map((wpm) => wpm.toFixed(2));
@@ -55,21 +53,8 @@ const ResultPage = () => {
 	let formattedWpm = Number.isFinite(trueWpm)
 		? trueWpm.toFixed(2)
 		: "Calculating...";
-	// console.log(accuracy,formattedWpm)
 
-	// console.log(
-	// "inputArray",
-	// inputArray,
-	// "mistakesArray",
-	// mistakesArray
-	// "wpmArray",
-	// wpmArray,
-	// "rawWpmArray",
-	// rawWpmArray
-	// );
-	// const [isTestInvalid, setIsTestInvalid] = useState(false);
 	const sendResults = async (correctWordsArray, inputArray, mistakesArray) => {
-		// console.log(correctWordsArray);
 		try {
 			if (!localStorage.getItem("token")) {
 				throw new Error("Unauthorized");
@@ -107,7 +92,7 @@ const ResultPage = () => {
 
 	let push = false;
 	useEffect(() => {
-		if (!isTestInvalid && rawWpmArray.length > 0 && formattedWpm > 0 && !push  ) {
+		if (!isTestInvalid && rawWpmArray.length > 0 && formattedWpm > 0 && !push) {
 			sendResults(
 				correctWordsArray,
 				inputArray,
@@ -129,16 +114,9 @@ const ResultPage = () => {
 		}
 	}, [accuracy, dispatch, isLoading]);
 
-	// let flag = false;
-	// useEffect(() => {
-	// 	if (flag === false) {
-	// 		setNotEnteredArray(addNotEnteredWords(words, inputArray, notEnteredArray));
-	// 		flag = true;
-	// 	}
-	// }, []);
 	const [result, setResult] = useState([]);
 	const [isReady, setIsReady] = useState(false);
-	
+
 	useEffect(() => {
 		if (
 			(time && formattedWpmArray?.length > 0,
@@ -146,7 +124,6 @@ const ResultPage = () => {
 			mistakesArray?.length > 0)
 		) {
 			setIsReady(true);
-			// console.log(mistakesArray);
 			setResult((prevResult) => [
 				...prevResult,
 				{
@@ -158,10 +135,6 @@ const ResultPage = () => {
 			]);
 		}
 	}, []);
-
-	// useEffect(() => {
-	// 	if (isReady) console.log(result);
-	// }, [isReady]);
 
 	return (
 		<div>

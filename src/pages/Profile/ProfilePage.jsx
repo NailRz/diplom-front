@@ -161,14 +161,17 @@ const ProfilePage = () => {
 			</div>
 
 			<div className={classes.Charts}>
+				<h1>Последний завершенный тест</h1>
 				<ResultChart result={result} />
 			</div>
 
 			<div className={classes.Charts}>
+				<h1>Все завершенные тесты</h1>
 				{flag  && <ChartAllTime  dataArray={res}/>}
 			</div>
 			
 			<div className={classes.ResultsTable}>
+				<h1>Результаты</h1>
 				<ResultTable results={results} />
 			</div>
 		</div>

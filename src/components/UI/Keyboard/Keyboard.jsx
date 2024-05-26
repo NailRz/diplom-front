@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import classes from "./Keyboard.module.css";
 
 const Keyboard = ({ highlightKey }) => {
@@ -36,7 +37,13 @@ const Keyboard = ({ highlightKey }) => {
     "И": "leftIndex", "Т": "rightIndex", "Ь": "rightIndex", "Б": "rightMiddle",
     "Ю": "rightRing", ".": "rightPinky", "TAB": "leftPinky", "CAPS": "leftPinky", "SHIFTL": "leftPinky", "Space": "thumb", "SHIFTR": "rightPinky"
   };
-
+  const [flag, setFlag] = useState(0)
+  if (highlightKey === ' ' && flag == 1) {
+    highlightKey = 'Space';
+  } else{
+    if (flag == 0)
+    setFlag(1)
+  }
   return (
     <div className={classes.keyboard}>
       {rows.map((row, rowIndex) => (
@@ -44,7 +51,7 @@ const Keyboard = ({ highlightKey }) => {
           {row.map((key) => (
             <div
               key={key}
-              className={`${classes.keyboardKey} ${key === highlightKey ? classes.highlight : ""}`}
+              className={`${classes.keyboardKey} ${key === highlightKey ? classes.highlight : ''}`}
               style={{ backgroundColor: fingerColors[fingerMapping[key]] }}
             >
               {key}

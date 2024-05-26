@@ -201,12 +201,14 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 	// 		// console.log(currentCharIndex);
 	// 	}
 	// },[currentCharIndex])
+	const [index, setIndex] = useState(0);
 	const handleInputChange = (e) => {
 		const userInput = e.target.value;
 		const cleanedInput = userInput.replace(/\s+/g, " ");
 		const inputAr = userInput.split(" ");
-		// console.log(inputAr)
-		// console.log(cleanedInput)
+
+		// console.log(cleanedInput);
+
 
 		let err = 0;
 		for (let i = 0; i < inputAr.length; i++) {
@@ -217,6 +219,8 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 				err -= wordsProp[i - 1].length - inputAr[i - 1].length;
 			}
 		}
+		// console.log(cleanedInput.length -err)
+
 		// console.log(err);
 		setUserText(userInput);
 		if (userInput) {
@@ -230,6 +234,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 			setCurrentCharIndex(userInput.length);
 			if (userInput.length) {
 				highlightKey = wordsString[cleanedInput.length - err].toUpperCase();
+				// console.log(highlightKey);
 			}
 			setHighlight(highlightKey);
 			// console.log(highlightKey);
