@@ -321,7 +321,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 				<div className={classes.TestWords}>
 					<p>{timeLeft} </p>
 					<div className={classes.WordsWrapper}>
-						{isWordsLoading ? <h3>Идет загрузка... </h3> : renderWords()}
+						{isWordsLoading ? <h3>Генерация слов... </h3> : renderWords()}
 					</div>
 					<div className={classes.WpmWrapper}>
 						<p>Words per Minute (WPM): {formattedWpm}</p>

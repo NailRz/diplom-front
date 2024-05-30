@@ -9,6 +9,7 @@ import classes from "./ProfilePage.module.css";
 import ResultTable from "../../components/UI/ResultTable/ResultTable";
 import ResultChart from "../../components/UI/Chart/ResultChart";
 import ChartAllTime from "../../components/UI/Chart/ChartAllTime/ChartAllTime";
+import KbMap from "../../components/UI/Keyboard/KbMap";
 
 const ProfilePage = () => {
 	const getLastTResults = async () => {
@@ -21,6 +22,9 @@ const ProfilePage = () => {
 			const data = await response.json();
 			setResults(data);
 			console.log(data);
+			const allMistakes = data.flatMap((data) => data.mistakes);
+			setErrors(allMistakes)
+			console.log(allMistakes);
 			return data;
 		} catch (error) {
 			console.error("Error:", error.message);
@@ -35,7 +39,7 @@ const ProfilePage = () => {
 				throw new Error(errorData.message || "Ошибка при получении данных");
 			}
 			const data = await response.json();
-			console.log(data)
+			console.log(data);
 			setUserInfo(data);
 			return data;
 		} catch (error) {
@@ -80,7 +84,6 @@ const ProfilePage = () => {
 			throw error;
 		}
 	};
-	
 
 	const [results, setResults] = useState([]);
 	const result = results[0];
@@ -88,6 +91,7 @@ const ProfilePage = () => {
 	const [userInfo, setUserInfo] = useState();
 	const [createdAt, setCreatedAt] = useState();
 	const [wpm, setWpm] = useState();
+	const [errors, setErrors] = useState();
 	useEffect(() => {
 		if (userInfo) {
 			setCreatedAt(userInfo.createdAt.split("T")[0]);
@@ -105,12 +109,12 @@ const ProfilePage = () => {
 	let [flag, setFlag] = useState(0);
 
 	useEffect(() => {
-		console.log(res)
+		console.log(res);
 		if (res !== undefined) {
 			// setAllRes(res);
-			setFlag(1)
+			setFlag(1);
 		}
-	},[res])	
+	}, [res]);
 	const convertSeconds = (sec) => {
 		// let min = Math.floor(sec / 60);
 		let remainingSec = sec;
@@ -133,8 +137,15 @@ const ProfilePage = () => {
 						{userInfo ? createdAt : "Идет загрузка..."}
 					</div>
 				</div>
-				<div style={{display: "flex", alignItems: "center", flexDirection: "column", fontSize: "15px"}}>
-					<div >Лучшие результаты</div>
+				<div
+					style={{
+						display: "flex",
+						alignItems: "center",
+						flexDirection: "column",
+						fontSize: "15px",
+					}}
+				>
+					<div>Лучшие результаты</div>
 					<div className={classes.Results}>
 						{/* <div className={classes.Seconds}>15sec</div>
 					<div className={classes.Seconds}>30sec</div>
@@ -158,22 +169,31 @@ const ProfilePage = () => {
 							))}
 					</div>
 				</div>
+				<h1/>
+
 			</div>
 
 			<div className={classes.Charts}>
 				<h1>Последний завершенный тест</h1>
 				<ResultChart result={result} />
 			</div>
+			<div>
+				<h1>Тепловая карта ошибок</h1>
+				<h3>Обратите внимание на более темные зоны, в них Вы допускаете больше ошибок</h3>
+				<KbMap errors={errors} />
+				<h1/>
+			</div>
 
 			<div className={classes.Charts}>
 				<h1>Все завершенные тесты</h1>
-				{flag  && <ChartAllTime  dataArray={res}/>}
+				{flag && <ChartAllTime dataArray={res} />}
 			</div>
-			
+
 			<div className={classes.ResultsTable}>
 				<h1>Результаты</h1>
 				<ResultTable results={results} />
 			</div>
+			
 		</div>
 	);
 };
