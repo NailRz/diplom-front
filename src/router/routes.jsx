@@ -3,6 +3,7 @@ import ProfilePage from "../pages/Profile/ProfilePage";
 import { RegisratonPage } from "../pages/auth_registration/RegisratonPage";
 import { LoginPage } from "../pages/auth_registration/LoginPage";
 import { Navigate } from "react-router-dom";
+import Feedback from "../pages/FeedbackPage/Feedback";
 
 const routes = (isAuth) => [
 	{
@@ -23,6 +24,11 @@ const routes = (isAuth) => [
 	{
 		path: "/login",
 		element: !isAuth ? <LoginPage /> : <Navigate to="/" />,
+		exact: true,
+	},
+	{
+		path: "/feedback",
+		element:   <Feedback />  ,
 		exact: true,
 	},
 ];

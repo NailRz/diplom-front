@@ -23,7 +23,7 @@ const ProfilePage = () => {
 			setResults(data);
 			console.log(data);
 			const allMistakes = data.flatMap((data) => data.mistakes);
-			setErrors(allMistakes)
+			setErrors(allMistakes);
 			console.log(allMistakes);
 			return data;
 		} catch (error) {
@@ -87,6 +87,13 @@ const ProfilePage = () => {
 
 	const [results, setResults] = useState([]);
 	const result = results[0];
+	let lastTestWpm = 0;
+	let accuracy = 0;
+	if (result) {
+		lastTestWpm = result.calculatedWpm;
+		accuracy = result.calculatedAccuracy;
+	}
+	console.log(result, lastTestWpm, accuracy);
 	const [res, setAllRes] = useState();
 	const [userInfo, setUserInfo] = useState();
 	const [createdAt, setCreatedAt] = useState();
@@ -169,19 +176,26 @@ const ProfilePage = () => {
 							))}
 					</div>
 				</div>
-				<h1/>
-
+				<h1 />
 			</div>
 
 			<div className={classes.Charts}>
+			<div style={{flexDirection: "column"}}>
 				<h1>Последний завершенный тест</h1>
+				<h2> Time: {localStorage.getItem("testDuration")}</h2>
+				<h2> Words per Minute: {lastTestWpm}</h2>
+				<h2> Accuracy: {accuracy}%</h2></div>
+				
 				<ResultChart result={result} />
 			</div>
 			<div>
 				<h1>Тепловая карта ошибок</h1>
-				<h3>Обратите внимание на более темные зоны, в них Вы допускаете больше ошибок</h3>
+				<h3>
+					Обратите внимание на более темные зоны, в них Вы допускаете больше
+					ошибок
+				</h3>
 				<KbMap errors={errors} />
-				<h1/>
+				<h1 />
 			</div>
 
 			<div className={classes.Charts}>
@@ -193,7 +207,6 @@ const ProfilePage = () => {
 				<h1>Результаты</h1>
 				<ResultTable results={results} />
 			</div>
-			
 		</div>
 	);
 };

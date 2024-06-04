@@ -85,7 +85,7 @@ const TestPage = () => {
 					position: "absolute",
 				}}
 			>
-				Press Tab to restart test.
+				Нажмите Tab для перезапуска 
 			</div>
 			{/* <button onClick={restartTest}>Restart</button> */}
 			

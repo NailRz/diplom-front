@@ -4,6 +4,8 @@ import { useContext } from "react";
 import { AuthContext } from "../../context";
 import { FiLogOut } from "react-icons/fi";
 import { GoPerson, GoX } from "react-icons/go";
+import { VscFeedback } from "react-icons/vsc";
+
 const Navbar = () => {
 	const { isAuth, setIsAuth, isLoading } = useContext(AuthContext);
 
@@ -20,9 +22,13 @@ const Navbar = () => {
       <Link className={classes.TestLink} to="/">
         <GoX style={{ position: "relative", top: "4px" }} size={17} /> Test
       </Link>
+     
       <div className={classes.NavbarButtons}>
         {isAuth && (
           <>
+            <Link  to="/feedback">
+            <VscFeedback size={13} style={{ position: "relative", top: "2px" }}/> Feedback
+            </Link>
             <Link to="/profile" className={classes.ProfileButton}>
               <GoPerson size={13} style={{ position: "relative", top: "2px" }} /> Profile
             </Link>

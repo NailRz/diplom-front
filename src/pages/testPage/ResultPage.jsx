@@ -147,10 +147,10 @@ const ResultPage = () => {
 					) : (
 						<div>
 							<div className={classes.ResultText}>
-								<h1>Your results: </h1>
-								<h2> Time: {localStorage.getItem("testDuration")}</h2>
-								<h2> Words per Minute: {formattedWpm}</h2>
-								<h2> Accuracy: {accuracy}%</h2>
+								<h1>Ваш результат: </h1>
+								<h2> Зв время: {localStorage.getItem("testDuration")}</h2>
+								<h2> Слов в минуту: {formattedWpm}</h2>
+								<h2> Точность ввода: {accuracy}%</h2>
 								<button onClick={sendHandler}> Отправить </button>
 							</div>
 						</div>
