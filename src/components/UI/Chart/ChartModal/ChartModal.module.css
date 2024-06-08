@@ -12,12 +12,14 @@
 }
 
 .MyModalContent {
-    padding: 25px;
+    padding: 30px;
+    margin: 30px;
     background:var(--background-color);
     border-radius: 16px;
     min-width: 250px;
     width: 60%; 
     height: 60%; 
+    /* bottom: 100px; */
 }
 
 .MyModal.active {

@@ -11,6 +11,7 @@ const initialState = {
     mistakesArray: [],
     wpmArray: [],
     rawWpmArray: [],
+	top5Letters: [] ,
 };
 
 export const testData = createSlice({
@@ -47,6 +48,9 @@ export const testData = createSlice({
 		updateRawWpmArray: (state, action) => {
 			state.rawWpmArray = action.payload;
 		},
+		updateTop5Letters: (state, action) => {
+			state.top5Letters = action.payload;
+		},
 		resetData: () => initialState,
 	},
 });
@@ -61,6 +65,7 @@ export const selectInputArray = (state) => state.testData.inputArray;
 export const selectMistakesArray = (state) => state.testData.mistakesArray;
 export const selectWpmArray = (state) => state.testData.wpmArray;
 export const selectRawWpmArray = (state) => state.testData.rawWpmArray;
+export const selecttop5Letters = (state) => state.testData.top5Letters;
 
 export const {
 	updateTime,
@@ -74,6 +79,7 @@ export const {
 	updateMistakesArray,
     updateWpmArray,
     updateRawWpmArray,
+	updateTop5Letters,
 } = testData.actions;
 
 export default testData.reducer;

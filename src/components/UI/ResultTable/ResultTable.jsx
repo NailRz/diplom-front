@@ -76,6 +76,7 @@ export default function ResultTable({ results }) {
 	const handleOpenChartModal = (row) => {
 		const result = getChartResult(row);
 		setChartResult(result);
+		console.log(result)
 		setModal(true);
 	};
 
@@ -173,7 +174,12 @@ export default function ResultTable({ results }) {
 									</button>
 									{modal && (
 										<ChartModal visible={modal} setVisible={setModal}>
+											<div style = {{display: 'flex', flexDirection: 'column'}}>
+											<span>Количество слов в минуту: {chartResult.calculatedWpm}</span>
+											<span>Точность ввода: {chartResult.calculatedAccuracy}%</span>
+											</div>
 											<ResultChart result={chartResult} />
+											
 										</ChartModal>
 									)}
 								</StyledTableCell>

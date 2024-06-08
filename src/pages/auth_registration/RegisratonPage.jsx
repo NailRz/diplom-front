@@ -37,16 +37,16 @@ export const RegisratonPage = () => {
 	return (
 		<div>
 			<form onSubmit={onSubmit} className={classes.AuthForm}>
-				<h2>Registration</h2>
+				<h2>Регистрация</h2>
 				<label htmlFor="email">Email</label>
 				<input type="email" placeholder="example@gmail.com" required />
-				<label htmlFor="email">Password</label>
-				<input type="password" placeholder="Enter your password" required />
-				<label htmlFor="email">Confirm password</label>
-				<input type="password" placeholder="Repeat your password" required />
-				<button type="submit">Register</button>
+				<label htmlFor="email">Пароль</label>
+				<input type="password" placeholder="Введите пароль" required />
+				<label htmlFor="email">Повторите пароль</label>
+				<input type="password" placeholder="Повторите пароль" required />
+				<button type="submit">Зарегистрироваться</button>
 				<a>
-					Do you have an account? <Link className={classes.TestLink} to="/login">Login</Link>
+					Уже есть аккаунт? <Link className={classes.TestLink} to="/login">Авторизация</Link>
 				</a>
 			</form>
 		</div>

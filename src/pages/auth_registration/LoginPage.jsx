@@ -31,7 +31,7 @@ export const LoginPage = () => {
 	return (
 		<div>
 			<form className={classes.AuthForm} onSubmit={onSubmit}>
-				<h2>Login</h2>
+				<h2>Авторизация</h2>
 
 				<label htmlFor="email">Email</label>
 				<input
@@ -41,7 +41,7 @@ export const LoginPage = () => {
 					placeholder="example@gmail.com"
 					required
 				/>
-				<label htmlFor="password">Password</label>
+				<label htmlFor="password">Пароль</label>
 				<input
 					type="password"
 					id="password"
@@ -49,9 +49,9 @@ export const LoginPage = () => {
 					placeholder="Enter your password"
 					required
 				/>
-				<button type="submit">Login</button>
+				<button type="submit">Войти</button>
 				<a>
-					Don&apos;t have an account? <Link className={classes.TestLink} to="/registration">Registration</Link>
+					Нет аккаунта? <Link className={classes.TestLink} to="/registration">Регистрация</Link>
 				</a>
 			</form>
 		</div>
