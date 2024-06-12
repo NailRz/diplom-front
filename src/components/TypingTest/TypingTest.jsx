@@ -324,7 +324,7 @@ export const TypingTest = ({ wordsProp, isWordsLoading }) => {
 						{isWordsLoading ? <h3>Генерация слов... </h3> : renderWords()}
 					</div>
 					<div className={classes.WpmWrapper}>
-						<p>Words per Minute (WPM): {formattedWpm}</p>
+						<p>Количество слов в минуту (WPM): {formattedWpm}</p>
 					</div>
 				</div>
 				<select

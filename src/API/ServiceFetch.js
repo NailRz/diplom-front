@@ -9,6 +9,7 @@ export const getWords = async (isAuth) => {
         };
         if (isAuth) {
           const token = localStorage.getItem("token");
+          console.log(token)
           if (!token) {
             throw new Error("Token not found");
           }
